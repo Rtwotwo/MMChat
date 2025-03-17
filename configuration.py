@@ -48,3 +48,4 @@ if __name__ == '__main__':
       args = config()
       for arg in vars(args):
             print(f'{arg}:\t\t{getattr(args, arg)}\t\t')
+      
