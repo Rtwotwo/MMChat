@@ -14,7 +14,7 @@ from scipy.io.wavfile import write
 import numpy as np
 import webrtcvad 
 from llm_chat_model import llm_chat
-
+from llm_chat_model import ollama_generator
 
 ############################  定义变量解析域配置  #################################
 def config():
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     text = audio_to_text(args)
     print(f'====The text is: {text}====')
 
-    response_text = llm_chat(text)
+    response_text = ollama_generator(text)
     with open(r'data_cached\audio_to_text.txt', 'w', encoding='utf-8') as f:
         f.write(response_text)
     text_to_audio(args)
