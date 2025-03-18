@@ -1,5 +1,5 @@
 <p align='center'>
-<img src='assets\MMChat.jpg', alt='MMChat'>
+<img src='assets/MMChat.jpg', alt='MMChat'>
 </p>
 
 # MMChat Project Guide :rocket:

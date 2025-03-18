@@ -117,13 +117,7 @@ def text_to_audio(args):
         # play the text to audio file
         print('====next the text to audio file will be played...====')
         playsound(text_to_audio_file)
-    else: raise ValueError('====text is None!====')
-
-
-def text_audio_chat(text):
-    """use the api to get the text and chat with the llm"""
-    
-    
+    else: raise ValueError('====text is None!====')    
 
     
 
