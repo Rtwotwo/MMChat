@@ -1,7 +1,8 @@
 """
-任务: 多模态语音、视觉、手势模型的搭建
-      并且构建tkinter的GUI界面框架
-时间: 2025/03/03-Redal
+Date: 2025/03/03
+Author: Redal
+TODO: 多模态语音、视觉、手势模型的搭建, 并且构建tkinter的GUI界面框架
+Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
 import sys
@@ -23,10 +24,24 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 
 
+########################  配置tkinter的界面配置  ###########################
+def GUI_Config():
+      """The GUI is defined for tkinter configuration"""
+      parser = argparse.ArgumentParser(description='MMChat GUI configuration',
+                        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+      parser.add_argument('--gui_title', type=str, default='MMChat', help='The title of the GUI window')
+      parser.add_argument('--gui_width', type=str, default='800', help='The width of the GUI window')
+      parser.add_argument('--gui_height', type=str, default='600', help='The height of the GUI window')
+      # parser.add_argument('')
+      args = parser.arguments()
+      return args
+
+
+
 ########################  构造基本GUI界面框架  ###########################
 class ChatMMGUI(tk.Frame):
       """The GUI is designed to interact with multi_models tkinter"""
-      def __init__(self, root):
+      def __init__(self, root, args):
             super().__init__(root)
             self.root = root
 
@@ -34,5 +49,6 @@ class ChatMMGUI(tk.Frame):
       def __widgets__(self):
             self.root.title('ChatMMGUI - Redal')
             self.root.geometry('800x600')
+
             
 
