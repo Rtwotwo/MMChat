@@ -1,6 +1,6 @@
 """
-Date: 2025/03/03
 Author: Redal
+Date: 2025/03/03
 TODO: 多模态语音、视觉、手势模型的搭建, 并且构建tkinter的GUI界面框架
 Homepage: https://github.com/Rtwotwo/MMchat.git
 """
@@ -32,8 +32,8 @@ def GUI_Config():
       parser.add_argument('--gui_title', type=str, default='MMChat', help='The title of the GUI window')
       parser.add_argument('--gui_width', type=str, default='800', help='The width of the GUI window')
       parser.add_argument('--gui_height', type=str, default='600', help='The height of the GUI window')
-      # parser.add_argument('')
-      args = parser.arguments()
+      parser.add_argument('--audio_shower', type=str, default='assets/audio_gif/dynamic1.gif', help='The audio shower of the GUI window')
+      args = parser.parse_args()
       return args
 
 
@@ -44,11 +44,22 @@ class ChatMMGUI(tk.Frame):
       def __init__(self, root, args):
             super().__init__(root)
             self.root = root
-
+            self.args = args
+            self.__widgets__()
       
       def __widgets__(self):
-            self.root.title('ChatMMGUI - Redal')
-            self.root.geometry('800x600')
+            self.root.title('ChatMMGUI-Redal')
+            self.root.geometry(f'{self.args.gui_width}x{self.args.gui_height}')
+            self.main_label = tk.Label(self.root); self.main_label.place(x=0, y=0)
+            self.main_label.config()
+            
 
+
+
+########################  主函数测试分析  ###########################
+if __name__ == '__main__':
+      args = GUI_Config()
+      root = tk.Tk()
+      root.mainloop()
             
 

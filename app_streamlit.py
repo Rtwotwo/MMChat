@@ -1,7 +1,9 @@
 """
-任务: 构建streamlit模型应用部署网页, 引入VLM的api接口,
+Author: Redal
+Date: 2025/03/03
+TODO: 构建streamlit模型应用部署网页, 引入VLM的api接口,
       部署网页引用直接开发,实现本地与云端互联
-时间: 2025/02/23-Redal
+Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import streamlit as st
 import pandas as pd

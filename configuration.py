@@ -1,7 +1,8 @@
 """
-任务: 定义项目所需的参数配置,
-      定义全局参数变量
-时间: 2025/03/01-Redal
+Author: Redal
+Date: 2025/03/03
+TODO: 定义项目所需的参数配置,定义全局参数变量
+Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
 import sys
