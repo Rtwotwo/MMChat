@@ -2,7 +2,7 @@
 api/
 
 # 忽略课程资料文件
-source/
+# source/
 
 # 忽略权重文件上传
 weights/
