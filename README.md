@@ -14,6 +14,8 @@ MMChat aims to combine current cutting-edge technologies and published big langu
 <img src='assets/overview/system_explanation.jpg', alt='MMChat'>
 </p>
 
-___Detailed Explanation___: 
+___Detailed Explanation___:
+
+## Continuously updating
 
 ## Runtime Environment :computer:
