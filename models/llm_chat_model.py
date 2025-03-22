@@ -1,8 +1,10 @@
 """
-任务: 导入基础chat小参量模型,配置权重部署configuration,
+Author: Redal
+Date: 2025/03/22
+TODO: 导入基础chat小参量模型,配置权重部署configuration,
       实现基本的代码互动沟通与测试。若仍有时间, 可尝试部署
       数据集进行SFT微调监督训练
-时间: 2025/03/01-Redal
+Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
 import sys

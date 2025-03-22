@@ -1,7 +1,9 @@
 """
-任务: 构建音频-文本互相转换的基础模型,配置调用接口
+Author: Redal
+Date: 2025/03/22
+TODO: 构建音频-文本互相转换的基础模型,配置调用接口
       使用openai的whisper模型tiny/base/large-v2
-时间: 2025/02/28-Redal
+Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
 import argparse

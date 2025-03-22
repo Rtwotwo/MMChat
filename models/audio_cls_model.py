@@ -1,7 +1,8 @@
 """
-任务: 构建基础的语音指令分类模型,使用之前训练
-      audio_cls.pth模型进行分类测试
-时间: 2025/03/01-Redal
+Author: Redal
+Date: 2025/03/22
+TODO: 构建基础的语音指令分类模型,使用之前训练audio_cls.pth模型进行分类测试
+Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
 import sys

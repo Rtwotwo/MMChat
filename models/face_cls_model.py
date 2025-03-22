@@ -1,7 +1,9 @@
 """
+Author: Redal
+Date: 2025/03/22
 TODO: 使用dlib提取脸部特征点以及描述符特征;
       基于自定义深度学习模型训练提取
-Time: 2025/03/09-Redal
+Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
 import sys

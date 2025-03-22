@@ -1,7 +1,9 @@
 """
+Author: Redal
+Date: 2025/03/22
 TODO: 测试手势分类的模型性能-transformer+LSTM模型,
       以及CNN+LSTM模型性能对比
-Time: 2025/03/09-Redal
+Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import torch
 from torch import Tensor
