@@ -29,11 +29,11 @@ MMChat is developed using python3.10, and the relevant dependencies are as follo
 
 ## 2.TODO List :clipboard:
 
-- [] Complete identity authentication model design and system deployment: face authentication, audio key authentication, voiceprint authentication
-- [] Design monocular SLAM algorithm to achieve basic 3D environment sparse modeling tasks
-- [] Use YOLOv5 to recognize pedestrians, vehicles, etc. and track objects
-- [] Complete the local deployment of small parameter VLM or LLM to achieve interaction with users
-- [] Use model pruning (Opt) or model quantization to int8/int16 to compress the model
-- [] If you have time to learn the flight control algorithm PID or other algorithms, optimize the system interaction experience
+- [ ] Complete identity authentication model design and system deployment: face authentication, audio key authentication, voiceprint authentication  
+- [ ] Design monocular SLAM algorithm to achieve basic 3D environment sparse modeling tasks
+- [ ] Use YOLOv5 to recognize pedestrians, vehicles, etc. and track objects
+- [ ] Complete the local deployment of small parameter VLM or LLM to achieve interaction with users
+- [ ] Use model pruning (Opt) or model quantization to int8/int16 to compress the model
+- [ ] If you have time to learn the flight control algorithm PID or other algorithms, optimize the system interaction experience
 
 ## Continuously updating
