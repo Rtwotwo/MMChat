@@ -14,7 +14,7 @@ MMChat aims to combine current cutting-edge technologies and published big langu
 <img src='assets/overview/system_explanation.jpg', alt='MMChat'>
 </p>
 
-___Detailed Explanation___: The authentication part is proposed to use facial recognition technology based on facenet-pytorch/dlib, authentication and recognition technology based on audio key, and voiceprint recognition technology; In the human-machine interaction part, LLM with small parameters is proposed as the central control system for human-machine interaction; Interaction functions mainly include the use of gesture recognition as a basic means of controlling multimodal interaction to enable monocular SLAM, target object tracking technology, voice communication and other functions; Finally, if time permits, learn the PID control algorithm of the flight control algorithm to optimize the system interaction experience.
+___Detailed Explanation___: The authentication part is proposed to use facial recognition technology based on facenet-pytorch/dlib, authentication and recognition technology based on audio key, and voiceprint recognition technology; In the human-machine interaction part, LLM with small parameters is proposed as the central control system for human-machine interaction; Interaction functions mainly include the use of gesture recognition as a basic means of controlling multimodal interaction to enable monocular SLAM, target object tracking technology, voice communication and other functions; Try to use model pruning and model quantization techniques to compress the model to adapt to mobile end devices; Finally, if time permits, learn the PID control algorithm of the flight control algorithm to optimize the system interaction experience.
 
 ## 1.Runtime Environment :computer:
 
@@ -35,5 +35,7 @@ MMChat is developed using python3.10, and the relevant dependencies are as follo
 - [ ] Complete the local deployment of small parameter VLM or LLM to achieve interaction with users
 - [ ] Use model pruning (Opt) or model quantization to int8/int16 to compress the model
 - [ ] If you have time to learn the flight control algorithm PID or other algorithms, optimize the system interaction experience
+
+## 3.System Test :hourglass_flowing_sand:
 
 ## Continuously updating
