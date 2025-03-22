@@ -12,7 +12,7 @@ from openai import OpenAI
 current = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(current)
 sys.path.append(parent)
-from configuration import config
+from models.configuration import config
 
 
 ###############################  构建相关的llm_chat函数  ###############################
