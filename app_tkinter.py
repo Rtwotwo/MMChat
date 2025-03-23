@@ -42,13 +42,16 @@ class MMChatTkinter(tk.Frame):
             super().__init__(root)
             self.root = root
             self.args = args
+            self.__set_flags__()
             self.__widgets__()
       
             self.video_cap = cv2.VideoCapture(0)
             self.threading = threading.Thread(target=self.__video_loop__)
             self.threading.daemon = True
             self.threading.start()
-
+      
+      def __set_flags__(self):
+            self.face_authentication_flag = False
       def __widgets__(self):
             self.root.title('MMChat-Redal')
             self.root.geometry(f'{self.args.gui_width}x{self.args.gui_height}')
@@ -60,8 +63,12 @@ class MMChatTkinter(tk.Frame):
             self.main_label.image = img_tk
             # Set MMChat App Introduction label
             self.introduction_label = tk.Label(self.root, font='Arial',bg='white', width=25, height=5)
-            self.introduction_label.place(x=540, y=0)
+            self.introduction_label.place(x=550, y=0)
             self.introduction_label.config(text='MMChat App Introduction')
+            # Functional Button Related MMchat mode
+            self.button_authentication = tk.Button(self.root, text='Face Authentication', font='Arial',
+                        bg='white', fg='black',width=15, height=2, command=self.__button_authentication__)
+            self.button_authentication.place(x=520, y=100)
 
       def __video_loop__(self):
             while self.video_cap.isOpened():
@@ -75,6 +82,9 @@ class MMChatTkinter(tk.Frame):
             self.main_label.config(image=img_tk)
             self.main_label.image = img_tk
             self.after(33)
+
+      def __button_authentication__(self):
+            pass
 
             
 
