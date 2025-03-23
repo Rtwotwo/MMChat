@@ -7,10 +7,10 @@ Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
 import argparse
-import whisper # audio to text
-from gtts import gTTS # text to audio 
-import wave # save audio file
-from playsound import playsound # play audio file
+import whisper
+from gtts import gTTS 
+import wave 
+from playsound import playsound 
 import sounddevice as sd
 from scipy.io.wavfile import write 
 import numpy as np

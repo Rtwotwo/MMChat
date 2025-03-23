@@ -6,16 +6,13 @@ Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
 import sys
+import cv2
+import torch
 import argparse
 import threading
 import tkinter as tk
 from tkinter import ttk
-import cv2
-import numpy as np
 from PIL import Image, ImageTk
-import torch
-import torch.functional as F
-from torchvision.transforms import transforms
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_path)
@@ -25,21 +22,21 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 
 ########################  配置tkinter的界面配置  ###########################
-def GUI_Config():
+def Tkinter_Config():
       """The GUI is defined for tkinter configuration"""
       parser = argparse.ArgumentParser(description='MMChat GUI configuration',
                         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
       parser.add_argument('--gui_title', type=str, default='MMChat', help='The title of the GUI window')
       parser.add_argument('--gui_width', type=str, default='800', help='The width of the GUI window')
       parser.add_argument('--gui_height', type=str, default='600', help='The height of the GUI window')
-      parser.add_argument('--audio_shower', type=str, default='assets/audio_gif/dynamic1.gif', help='The audio shower of the GUI window')
+      parser.add_argument('--coverimg_path', type=str, default='assets/MMChat.jpg', help='The audio shower of the GUI window')
       args = parser.parse_args()
       return args
 
 
 
 ########################  构造基本GUI界面框架  ###########################
-class ChatMMGUI(tk.Frame):
+class MMChatTkinter(tk.Frame):
       """The GUI is designed to interact with multi_models tkinter"""
       def __init__(self, root, args):
             super().__init__(root)
@@ -47,19 +44,39 @@ class ChatMMGUI(tk.Frame):
             self.args = args
             self.__widgets__()
       
+            self.video_cap = cv2.VideoCapture(0)
+            self.threading = threading.Thread(target=self.__video_loop__)
+            self.threading.daemon = True
+            self.threading.start()
+
       def __widgets__(self):
-            self.root.title('ChatMMGUI-Redal')
+            self.root.title('MMChat-Redal')
             self.root.geometry(f'{self.args.gui_width}x{self.args.gui_height}')
-            self.main_label = tk.Label(self.root); self.main_label.place(x=0, y=0)
-            self.main_label.config()
+            self.root.configure(bg='white')
+            self.main_label = tk.Label(self.root,width=512, height=512); self.main_label.place(x=0, y=0)
+            # Set the background image for main label
+            img_tk = ImageTk.PhotoImage(Image.open(self.args.coverimg_path))
+            self.main_label.config(image=img_tk)
+            self.main_label.image = img_tk
+      def __video_loop__(self):
+            while self.video_cap.isOpened():
+                  ret, frame = self.video_cap.read()
+                  if ret: 
+                        self.frame = cv2.flip( cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (512, 512)), 1 )
+                        self.__video_show__()
+                  else: break
+      def __video_show__(self):
+            img_tk = ImageTk.PhotoImage(Image.fromarray(self.frame))
+            self.main_label.config(image=img_tk)
+            self.main_label.image = img_tk
+            self.after(33)
+
             
-
-
 
 ########################  主函数测试分析  ###########################
 if __name__ == '__main__':
-      args = GUI_Config()
+      args = Tkinter_Config()
       root = tk.Tk()
-      root.mainloop()
+      app = MMChatTkinter(root, args)
+      app.mainloop()
             
-

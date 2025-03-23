@@ -64,7 +64,7 @@ class VideoProcessor:
 
 
 ##########################  PyQt_GUI软件设计  #############################
-class MMChat_PyQt(QMainWindow):
+class MMChatPyQt(QMainWindow):
     def __init__(self, args, **kwargs):
         super().__init__()
         self.args = args
@@ -97,6 +97,6 @@ if __name__ == "__main__":
     args = pyqt_config()
     # Initialize PyQt GUI
     app = QApplication(sys.argv)
-    window = MMChat_PyQt(args)
+    window = MMChatPyQt(args)
     window.show()
     sys.exit(app.exec_())
