@@ -36,6 +36,6 @@ MMChat is developed using python3.10, and the relevant dependencies are as follo
 - [ ] Use model pruning (Opt) or model quantization to int8/int16 to compress the model
 - [ ] If you have time to learn the flight control algorithm PID or other algorithms, optimize the system interaction experience
 
-## 3.System Test :hourglass_flowing_sand:
+## 3.System Function :hourglass_flowing_sand:
 
 ## Continuously updating
