@@ -105,7 +105,6 @@ class FaceNetExtractor(object):
             with torch.no_grad(): self.embedding = self.model(self.input)
             return self.embedding.detach().cpu().numpy()
 
-
 class FaceRecognition(object):
       """use face-recognition model to recognize face and
       recognise all the faces in the frame, format [1, 128]
