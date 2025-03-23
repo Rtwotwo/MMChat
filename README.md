@@ -1,5 +1,6 @@
 <p align='center'>
 <img src='assets/MMChat.jpg', alt='MMChat'>
+<img src='assets/MMChat_logo.jpg', alt='MMChat'>
 </p>
 
 # :rocket: MMChat Project Guide :rocket:
@@ -37,5 +38,7 @@ MMChat is developed using python3.10, and the relevant dependencies are as follo
 - [ ] If you have time to learn the flight control algorithm PID or other algorithms, optimize the system interaction experience
 
 ## 3.System Function :hourglass_flowing_sand:
+
+___Face Recognition___: 
 
 ## Continuously updating

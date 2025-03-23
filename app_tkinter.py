@@ -29,7 +29,7 @@ def Tkinter_Config():
       parser.add_argument('--gui_title', type=str, default='MMChat', help='The title of the GUI window')
       parser.add_argument('--gui_width', type=str, default='800', help='The width of the GUI window')
       parser.add_argument('--gui_height', type=str, default='600', help='The height of the GUI window')
-      parser.add_argument('--coverimg_path', type=str, default='assets/MMChat.jpg', help='The audio shower of the GUI window')
+      parser.add_argument('--coverimg_path', type=str, default='assets/MMChat_app.jpg', help='The audio shower of the GUI window')
       args = parser.parse_args()
       return args
 
@@ -58,6 +58,11 @@ class MMChatTkinter(tk.Frame):
             img_tk = ImageTk.PhotoImage(Image.open(self.args.coverimg_path))
             self.main_label.config(image=img_tk)
             self.main_label.image = img_tk
+            # Set MMChat App Introduction label
+            self.introduction_label = tk.Label(self.root, font='Arial',bg='white', width=25, height=5)
+            self.introduction_label.place(x=540, y=0)
+            self.introduction_label.config(text='MMChat App Introduction')
+
       def __video_loop__(self):
             while self.video_cap.isOpened():
                   ret, frame = self.video_cap.read()
