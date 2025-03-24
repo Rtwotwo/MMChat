@@ -69,7 +69,7 @@ class MMChatTkinter(tk.Frame):
             self.button_authentication = tk.Button(self.root, text='Face Authentication', font='Arial',
                         bg='white', fg='black',width=15, height=2, command=self.__button_authentication__)
             self.button_authentication.place(x=520, y=100)
-
+            
       def __video_loop__(self):
             while self.video_cap.isOpened():
                   ret, frame = self.video_cap.read()
