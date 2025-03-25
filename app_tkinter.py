@@ -14,7 +14,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 from models.face_cls_model import FaceRecognition, face_config
-from utils.face_cls import face_visiblity
+from utils.face_cls import FaceVisiblity, DeciderCenter
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_path)
@@ -98,7 +98,7 @@ class MMChatTkinter(tk.Frame):
                                     face_embedding = self.FaceRe.__extract__(self.frame)
                                     facial_info['Name'] = 'Redal' # TODO
                                     facial_info['Embedding'] = face_embedding
-                              self.frame = face_visiblity(self.frame)
+                              self.frame = FaceVisiblity(self.frame)
                               self.__video_show__()
 
                         elif self.gesture_control_flag: 

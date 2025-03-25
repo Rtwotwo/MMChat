@@ -8,7 +8,7 @@ import cv2
 from facenet_pytorch import MTCNN
 
 
-def face_visiblity(frame):
+def FaceVisiblity(frame):
     """make the main face visible and plot bounding box
     :param frame: the camera frame to de ploted"""
     mtcnn = MTCNN(image_size=512, margin=0, keep_all=False, post_process=True)
@@ -19,3 +19,16 @@ def face_visiblity(frame):
             frame = cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
         return frame
     else: return frame
+
+
+def DeciderCenter(frame, r_pixels = 50):
+    """make the main face visible and plot bounding box
+    :param frame: the camera frame to de ploted
+    :return: bool value for answer whether center or not"""
+    mtcnn = MTCNN(image_size=512, margin=0, keep_all=False, post_process=True)
+    boxes, _ = mtcnn.detect(frame, landmarks=False)
+    if boxes is not None:
+        for box in boxes:
+            x1, y1, x2, y2 = box.astype(int)
+            
+
