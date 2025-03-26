@@ -7,12 +7,12 @@ Homepage: https://github.com/Rtwotwo/MMchat.git
 import cv2
 import math
 from facenet_pytorch import MTCNN
+mtcnn = MTCNN(image_size=512, margin=0, keep_all=False, post_process=True)
 
 
 def FaceVisiblity(frame):
     """make the main face visible and plot bounding box
     :param frame: the camera frame to de ploted"""
-    mtcnn = MTCNN(image_size=512, margin=0, keep_all=False, post_process=True)
     boxes, _ = mtcnn.detect(frame, landmarks=False)
     if boxes is not None:
         for box in boxes:
@@ -27,7 +27,6 @@ def DeciderCenter(frame, r_pixels = 100):
     :param frame: the camera frame to de ploted
     :return: bool value for answer whether center or not
     and the chenter os frame is (256,256)"""
-    mtcnn = MTCNN(image_size=512, margin=0, keep_all=False, post_process=True)
     boxes, _ = mtcnn.detect(frame, landmarks=False)
     if boxes is not None:
         for box in boxes:

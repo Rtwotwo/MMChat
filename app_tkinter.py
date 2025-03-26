@@ -82,9 +82,12 @@ class MMChatTkinter(tk.Frame):
             self.introduction_label.place(x=550, y=0)
             self.introduction_label.config(text='MMChat App Introduction')
             # Functional Button Related MMchat mode
-            self.button_authentication = tk.Button(self.root, text='Face Authentication', font='Arial',
-                        bg='white', fg='black',width=15, height=2, command=self.__button_authentication__)
-            self.button_authentication.place(x=520, y=100)
+            self.button_authentication = tk.Button(self.root, text='Authentication', font=('Arial',8),
+                        bg='white', fg='black',width=10, height=1, command=self.__button_authentication__)
+            self.button_authentication.place(x=540, y=100)
+            self.button_interaction = tk.Button(self.root, text='Interaction', font=('Arial',8),
+                        bg='white', fg='black',width=10, height=1, command=self.__button_interaction__)
+            self.button_interaction.place(x=600, y=150)
 
       def __video_loop__(self):
             while self.video_cap.isOpened():
@@ -131,7 +134,8 @@ class MMChatTkinter(tk.Frame):
       def __button_authentication__(self):
             self.main_window_show = not self.main_window_show
             self.face_authentication_flag = not self.face_authentication_flag
-
+      def __button_interaction__(self):
+            pass
             
 
 ########################  主函数测试分析  ###########################
