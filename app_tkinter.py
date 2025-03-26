@@ -5,6 +5,7 @@ TODO: 多模态语音、视觉、手势模型的搭建, 并且构建tkinter的GU
 Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
+import json
 import sys
 import cv2
 import torch
@@ -15,6 +16,7 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 from models.face_cls_model import FaceRecognition, face_config
 from utils.face_cls import FaceVisiblity, DeciderCenter
+from utils.top_mes import GetFaceName
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_path)
@@ -49,6 +51,7 @@ class MMChatTkinter(tk.Frame):
             self.root = root
             self.args = args
             self.__set_flags__()
+            self.__set_params__()
             self.__widgets__()
             # Initialize video capture and threading
             self.video_cap = cv2.VideoCapture(0)
@@ -63,6 +66,8 @@ class MMChatTkinter(tk.Frame):
             self.audio_llmchat_flag = False
             self.environment_vlm_flag = False
             self.gesture_control_flag = False
+      def __set_params__(self):
+            self.facial_info = {}
       def __widgets__(self):
             self.root.title('MMChat-Redal')
             self.root.geometry(f'{self.args.gui_width}x{self.args.gui_height}')
@@ -89,15 +94,23 @@ class MMChatTkinter(tk.Frame):
                   if ret: 
                         """Program main execution logic"""
                         if self.face_authentication_flag: 
-                              # Facial Recognition 
-                              face_emb_path = os.path.join(self.args.face_emb_savepath, 
-                                                           self.args.face_emb_jsonpath)
-                              with open(face_emb_path, 'w+') as jf:
-                                    # Extract facial embedding and save it into json file
-                                    facial_info = {}
-                                    face_embedding = self.FaceRe.__extract__(self.frame)
-                                    facial_info['Name'] = 'Redal' # TODO
-                                    facial_info['Embedding'] = face_embedding
+                              # Plot the circle aera for embedding
+                              cv2.circle(self.frame, (256,256), 200, (0, 0, 255), 2)
+                              cv2.circle(self.frame, (256,256), 100, (0, 0, 255), 2)
+                              if DeciderCenter(frame):
+                                    # Facial Recognition 
+                                    face_emb_path = os.path.join(self.args.face_emb_savepath, 
+                                                            self.args.face_emb_jsonname)
+                                    with open(face_emb_path, 'w+',encoding='utf-8') as jf:
+                                          # Extract facial embedding and save it into json file
+                                          _, face_embedding = self.FaceRe.__extract__(frame, all_faces=False)
+                                          topmessage = GetFaceName(self.root)
+                                          # warning: the face embeding cosists list[array[]]
+                                          self.facial_info[topmessage.name] = face_embedding[0].tolist()
+                                          jf.write(json.dumps(self.facial_info, ensure_ascii=False, indent=4))
+                                    # Close Facial Authentication windows 
+                                    self.face_authentication_flag = not self.face_authentication_flag
+                                    self.main_window_show = not self.main_window_show
                               self.frame = FaceVisiblity(self.frame)
                               self.__video_show__()
 
