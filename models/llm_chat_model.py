@@ -66,3 +66,4 @@ def ollama_generator(prompt):
 if __name__ == '__main__':
       text = "解释量子力学?"
       print(llm_chat(text))
+      print(ollama_generator(text))
