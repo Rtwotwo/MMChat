@@ -81,7 +81,7 @@ class FaceRecognition(object):
             return np.array(pil_img)
 ```
 
-## 3.Ollama Deployment :robot_face:
+## 3.Ollama Deployment :moon:
 
 This time, we use the Ollama model deployment method to realize the local deployment of the model. The local deployment models include: llava: latest, llava: 7b, deepseek-r1:1.5b, qwen2.5:1.5b, internlm2:1.8b. Among them, llava: latest, llava: 7b belong to the visual language large model, deepseek-r1:1.5b, qwen2.5:1.5b, internlm2:1.8b belong to the strong inference language large model. At the same time, I also plan to try to quantify the new [Qwen 2.5-Omni](https://huggingface.co/Qwen/Qwen2.5-Omni-7B): 7b full-mode model from HuggingFace local deployment to improve the comprehensive expression ability of the system.
 
@@ -92,5 +92,31 @@ This time, we use the Ollama model deployment method to realize the local deploy
 |deepseek-r1:1.5b|a42b25d8c10a|    1.1 GB  |
 |qwen2.5:1.5b  |65ec06548149|    986 MB    |
 |internlm2:1.8b|653be3eb69a0|    1.1 GB    |
+
+Of course, the specific method of calling the model is as follows. You can install Ollama on the official website and run the command to deploy the model locally. At the same time, the code of the relevant substitute model is as follows, you can read the relevant usage method in this [Python file](models/llm_chat_model.py). Finally, it is planned to use [ollama.cpp](quant/llama.cpp) to quantify the model to reduce the video memory consumption on the local computer.
+
+```bash
+pip install ollama
+ollama run llava:latest
+ollama run llava:7b
+ollama run deepseek-r1:1.5b
+ollama run qwen2.5:1.5b 
+ollama run internlm2:1.8b
+```
+
+```python
+def ollama_generator(prompt):
+      """Use the ollama local llms to generate the response
+      :param prompt: the prompt of the user"""
+      args = config()
+      with open('./api/content.txt', 'r', encoding='utf-8') as f:
+            content=f.read()
+      prompt = f"""请按照上述的要求回答{content}以下问题：{prompt}"""
+      generator = ollama.generate(
+            model = args.ollama_key,
+            prompt = prompt,
+            stream = False,)
+      return generator['response']
+```
 
 ## Continuously updating
