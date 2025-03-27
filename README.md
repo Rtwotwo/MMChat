@@ -93,7 +93,7 @@ This time, we use the Ollama model deployment method to realize the local deploy
 |qwen2.5:1.5b  |65ec06548149|    986 MB    |
 |internlm2:1.8b|653be3eb69a0|    1.1 GB    |
 
-Of course, the specific method of calling the model is as follows. You can install Ollama on the official website and run the command to deploy the model locally. At the same time, the code of the relevant substitute model is as follows, you can read the relevant usage method in this [Python file](models/llm_chat_model.py). Finally, it is planned to use [ollama.cpp](quant/llama.cpp) to quantify the model to reduce the video memory consumption on the local computer.
+Of course, the specific method of calling the model is as follows. You can install Ollama on the official website and run the command to deploy the model locally. At the same time, the code of the relevant substitute model is as follows, you can read the relevant usage method in this [Python file](models/llm_chat_model.py). Finally, it is planned to use [ollama.cpp]([quant/llama.cpp](https://github.com/ggml-org/llama.cpp/)) to quantify the model to reduce the video memory consumption on the local computer.
 
 ```bash
 pip install ollama
