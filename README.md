@@ -93,5 +93,4 @@ This time, we use the Ollama model deployment method to realize the local deploy
 |qwen2.5:1.5b  |65ec06548149|    986 MB    |
 |internlm2:1.8b|653be3eb69a0|    1.1 GB    |
 
-
 ## Continuously updating
