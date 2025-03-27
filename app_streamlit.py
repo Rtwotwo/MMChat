@@ -8,11 +8,13 @@ Homepage: https://github.com/Rtwotwo/MMchat.git
 import os
 import argparse
 import streamlit as st
-from models.face_cls_model import FaceRecognition, face_config
+import ollama
 st.set_page_config(
+        page_title = 'Welcome to MMchat!',
+        page_icon = ':robot_face:',
         layout='wide',
-        page_title='MMChat-Redal',
         initial_sidebar_state='auto')
+
 
 
 ##########################  定义变量解析阈  #############################
@@ -33,8 +35,27 @@ class MMChatStreamlit(object):
         self.__webpage__()
 
     def __webpage__(self):
-        st.header('Welcome to MMChat!')
+        st.title(self.args.main_title)
+        # Set the sidebar
+        st.sidebar.title('MMchat Settings')
+        st.sidebar.header('Choose Model Options')
+        st.sidebar.write('Please choose llm model you want to use')
+        llm_options = st.sidebar.multiselect('choose models', ['qwen2.5:1.5b', 'internlm2:1.8b', 'deepseek-r1:1.5b'])
+        vlm_options = st.sidebar.multiselect('choose vlm models', ['llava:latest', 'llava:7b'])
+        # Set the main Page 
+        if st.button('Start Chatting'):
 
+
+        st.text_input("Please enter your questions for mmchat...")
+        st.write(f'You have chosen {llm_options} and {vlm_options}')
+
+
+
+##########################  主函数测试分析  #############################
+def llm_chat(text):
+    """Use the ollama's LLM to chat
+    :param text: models' input text"""
+    generator = ollama.generate(text)
 
 
 ##########################  主函数测试分析  #############################
