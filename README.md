@@ -81,9 +81,7 @@ class FaceRecognition(object):
             return np.array(pil_img)
 ```
 
-## 3.Ollama Deployment :moon:
-
-This time, we use the Ollama model deployment method to realize the local deployment of the model. The local deployment models include: llava: latest, llava: 7b, deepseek-r1:1.5b, qwen2.5:1.5b, internlm2:1.8b. Among them, llava: latest, llava: 7b belong to the visual language large model, deepseek-r1:1.5b, qwen2.5:1.5b, internlm2:1.8b belong to the strong inference language large model. At the same time, I also plan to try to quantify the new [Qwen 2.5-Omni](https://huggingface.co/Qwen/Qwen2.5-Omni-7B): 7b full-mode model from HuggingFace local deployment to improve the comprehensive expression ability of the system.
+___Model Deployment___: This time, we use the Ollama model deployment method to realize the local deployment of the model. The local deployment models include: llava: latest, llava: 7b, deepseek-r1:1.5b, qwen2.5:1.5b, internlm2:1.8b. Among them, llava: latest, llava: 7b belong to the visual language large model, deepseek-r1:1.5b, qwen2.5:1.5b, internlm2:1.8b belong to the strong inference language large model. At the same time, I also plan to try to quantify the new [Qwen 2.5-Omni](https://huggingface.co/Qwen/Qwen2.5-Omni-7B): 7b full-mode model from HuggingFace local deployment to improve the comprehensive expression ability of the system.
 
 |  Model Name  |  Model ID  |  model size  |
 | ------------ | ---------- | ------------ |
@@ -93,7 +91,7 @@ This time, we use the Ollama model deployment method to realize the local deploy
 |qwen2.5:1.5b  |65ec06548149|    986 MB    |
 |internlm2:1.8b|653be3eb69a0|    1.1 GB    |
 
-Of course, the specific method of calling the model is as follows. You can install Ollama on the official website and run the command to deploy the model locally. At the same time, the code of the relevant substitute model is as follows, you can read the relevant usage method in this [Python file](models/llm_chat_model.py). Finally, it is planned to use [ollama.cpp]([quant/llama.cpp](https://github.com/ggml-org/llama.cpp/)) to quantify the model to reduce the video memory consumption on the local computer.
+___Ollama Installation___: Of course, the specific method of calling the model is as follows. You can install Ollama on the official website and run the command to deploy the model locally. At the same time, the code of the relevant substitute model is as follows, you can read the relevant usage method in this [Python file](models/llm_chat_model.py). Finally, it is planned to use [ollama.cpp](https://github.com/ggml-org/llama.cpp/) to quantify the model to reduce the video memory consumption on the local computer.
 
 ```bash
 pip install ollama
