@@ -30,10 +30,10 @@ MMChat is developed using python3.10, and the relevant dependencies are as follo
 
 ## 2.TODO List :clipboard:
 
-- [ ] Complete identity authentication model design and system deployment: face authentication, audio key authentication, voiceprint authentication  
-- [ ] Design monocular SLAM algorithm to achieve basic 3D environment sparse modeling tasks
+- [x] Complete identity authentication model design and system deployment: face authentication, audio key authentication, voiceprint authentication  
+- [ ] Realize the generation of 3D scene images from a single image
 - [ ] Use YOLOv5 to recognize pedestrians, vehicles, etc. and track objects
-- [ ] Complete the local deployment of small parameter VLM or LLM to achieve interaction with users
+- [x] Complete the local deployment of small parameter VLM or LLM to achieve interaction with users
 - [ ] Use model pruning (Opt) or model quantization to int8/int16 to compress the model
 - [ ] If you have time to learn the flight control algorithm PID or other algorithms, optimize the system interaction experience
 
@@ -80,5 +80,18 @@ class FaceRecognition(object):
                   draw_img.text((left, up - 10), name, fill=(0, 0, 255))
             return np.array(pil_img)
 ```
+
+## 3.Ollama Deployment :robot_face:
+
+This time, we use the Ollama model deployment method to realize the local deployment of the model. The local deployment models include: llava: latest, llava: 7b, deepseek-r1:1.5b, qwen2.5:1.5b, internlm2:1.8b. Among them, llava: latest, llava: 7b belong to the visual language large model, deepseek-r1:1.5b, qwen2.5:1.5b, internlm2:1.8b belong to the strong inference language large model. At the same time, I also plan to try to quantify the new [Qwen 2.5-Omni](https://huggingface.co/Qwen/Qwen2.5-Omni-7B): 7b full-mode model from HuggingFace local deployment to improve the comprehensive expression ability of the system.
+
+|  Model Name  |  Model ID  |  model size  |
+| ------------ | ---------- | ------------ |
+| llava:latest |8dd30f6b0cb1|    4.7 GB    |
+| llava:7b     |8dd30f6b0cb1|    4.7 GB    |
+|deepseek-r1:1.5b|a42b25d8c10a|    1.1 GB  |
+|qwen2.5:1.5b  |65ec06548149|    986 MB    |
+|internlm2:1.8b|653be3eb69a0|    1.1 GB    |
+
 
 ## Continuously updating
