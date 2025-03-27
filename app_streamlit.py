@@ -43,8 +43,7 @@ class MMChatStreamlit(object):
         llm_options = st.sidebar.multiselect('choose models', ['qwen2.5:1.5b', 'internlm2:1.8b', 'deepseek-r1:1.5b'])
         vlm_options = st.sidebar.multiselect('choose vlm models', ['llava:latest', 'llava:7b'])
         # Set the main Page 
-        if st.button('Start Chatting'):
-
+        # if st.button('Start Chatting'):
 
         st.text_input("Please enter your questions for mmchat...")
         st.write(f'You have chosen {llm_options} and {vlm_options}')
