@@ -38,6 +38,8 @@ class GetFaceName(tk.Frame):
         else: self.top_root.destroy()
 
 
+
+
 if __name__ == '__main__':
     # Test the GetFaceName class
     root = tk.Tk()
