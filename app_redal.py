@@ -117,7 +117,6 @@ class MMChatTkinter(tk.Frame):
                               try:
                                     if DeciderCenter(self.mtcnn, frame):
                                           # Facial Recognition 
-                                          self.facial_info, self.password_info = {}, {}
                                           face_emb_path = os.path.join(self.args.face_emb_savepath, self.args.face_emb_jsonname)
                                           password_emb_path = os.path.join(self.args.password_emb_savepath, self.args.password_emb_jsonname)
                                           # Extract facial embedding and save it into json file
@@ -128,8 +127,10 @@ class MMChatTkinter(tk.Frame):
                                           self.password_info[topmessage.name] = topmessage.password
                                           if topmessage.name and topmessage.password is not None:
                                                 with open(face_emb_path, 'w+',encoding='utf-8') as jf:
+                                                      self.facial_info = dict(filter(lambda item: item[0] is not None, self.facial_info.items()))
                                                       jf.write(json.dumps(self.facial_info, ensure_ascii=False, indent=4))
                                                 with open(password_emb_path, 'w+',encoding='utf-8') as jf:
+                                                      self.password_info = dict(filter(lambda item: item[0] is not None, self.password_info.items()))
                                                       jf.write(json.dumps(self.password_info, ensure_ascii=False, indent=4))
                                           # Close Facial Authentication windows 
                                           self.face_authentication_flag = not self.face_authentication_flag

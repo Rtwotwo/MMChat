@@ -1,7 +1,8 @@
 """
 Author: Redal
 Date: 2025/03/03
-TODO: Create TopRoot Message Information
+TODO: Create TopRoot Message Information,
+      Try design software in a multithreaded manner
 Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
@@ -73,7 +74,7 @@ class CreateMessageBox(tk.Frame):
         self.Label_Info.config(text='\n  1.Gesture Control: Use your hand to control the posture of uav' + 
                              '\n  2.Face Autherization: According to facial information to open system' + 
                              '\n  3.Multimodal Interaction: Interact with V/LLM model for better experience' + 
-                             '\n  4.Object Detection: Use yolov5 to detect cars and people in curent environment' +
+                             '\n  4.Object Detection: Use yolov5 to detect cars and people in the environment' +
                              '\n  5.Spectrogram Histogram: Use spectrogram and histogram about ecah frame ' +
                              '\n  6.Image ToWorld: Use single-picture to reconstruct the world')
         self.Button_Exit = tk.Button(self.top_root, text='Exit', font='Arial', command=self.__exit__)
@@ -96,24 +97,31 @@ class LoginInterface(tk.Frame):
         self.__set_widgets__()
         # Setting the video_cap
         self.video_cap = cv2.VideoCapture(0)
+        self.frame_queue = queue.Queue()
         self.threading = threading.Thread(target=self.__video_loop__)
         self.threading.daemon = True
         self.threading.start()
+        self.after(10, self.__update_video__)
         # Wait for the Toplevel window to close
-        self.top_root.wait_window()
+        # Warning: open the function could block main thread
+        # self.top_root.wait_window()
+        self.top_root.protocol("WM_DELETE_WINDOW", self.__Return__)
     def __set_widgets__(self):
         self.frame = None
         self.pass_word = None
         self.face_embedding = None
         self.top_root.title('Login Interface')
-        self.top_root.geometry('600x600')
+        self.top_root.geometry('650x512')
         # Set Main title
         self.Button_FaceLogin = tk.Button(self.top_root, text='人脸登陆', font='Arial',
-                        bg='white', fg='black',width=15, height=2, command=self.__FaceLogin__)
+                        bg='white', fg='black',width=10, height=1, command=self.__FaceLogin__)
         self.Button_FaceLogin.place(x = 540, y=200)
         self.Button_PasswordLogin = tk.Button(self.top_root, text='密码登陆', font='Arial',
-                        bg='white', fg='black',width=15, height=2, command=self.__PasswordLogin__)
-        self.Button_PasswordLogin.place(x = 600, y=200)
+                        bg='white', fg='black',width=10, height=1, command=self.__PasswordLogin__)
+        self.Button_PasswordLogin.place(x = 540, y=250)
+        self.Button_Return = tk.Button(self.top_root, text='返回主界面', font='Arial',
+                        bg='white', fg='black',width=10, height=1, command=self.__Return__)
+        self.Button_Return.place(x = 540, y=300)
         # Set Mian Label for Facial Frames
         self.main_label = tk.Label(self.top_root, justify='center', wraplength=380, width=512, height=512)
         self.main_label.config(text='请选择登入系统的方式\n点击“人脸登入”或“密码登入”即可')
@@ -124,32 +132,33 @@ class LoginInterface(tk.Frame):
             frame = cv2.flip( cv2.cvtColor( cv2.resize(frame, (512, 512)), cv2.COLOR_BGR2RGB ), 1 )
             if ret:
                 self.frame = frame
-                self.__video_show__()
+                self.frame_queue.put(self.frame)
             else: break
-    def __video_show__(self):
-            if self.main_window_show: 
-                self.main_label.config(text='请选择登入系统的方式\n点击“人脸登入”或“密码登入”即可')
-            else: 
-                img_tk = ImageTk.PhotoImage(Image.fromarray(self.frame))
-                self.main_label.config(image=img_tk)
-                self.main_label.image = img_tk
-                self.after(33)
+    def __update_video__(self):
+        try:
+            frame = self.frame_queue.get_nowait()
+            img_tk = ImageTk.PhotoImage(Image.fromarray(frame))
+            self.main_label.config(image=img_tk)
+            self.main_label.image = img_tk
+        except queue.Empty: pass
+        self.after(10, self.__update_video__)
     def __FaceLogin__(self):
         self.face_login = True
-        self.top_root.destroy()
     def __PasswordLogin__(self):
         self.password_login = True
+    def __Return__(self):
+        self.video_cap.release()
         self.top_root.destroy()
 
 
 
 if __name__ == '__main__':
     # Test the GetFaceName class
-    root = tk.Tk()
-    root.withdraw()
-    top_message = GetFaceName(root)
-    print("User entered name:", top_message.name)
-    root.mainloop()
+    # root = tk.Tk()
+    # root.withdraw()
+    # top_message = GetFaceName(root)
+    # print("User entered name:", top_message.name)
+    # root.mainloop()
 
     # Test the CreateMessageBox class
     # root = tk.Tk()
@@ -158,8 +167,7 @@ if __name__ == '__main__':
     # root.mainloop()
 
     # Test the LoginInterface class
-    # root = tk.Tk()
-    # root.withdraw()
-    # login_interface = LoginInterface(root)
-    # root.mainloop()
-    
+    root = tk.Tk()
+    root.withdraw()
+    login_interface = LoginInterface(root)
+    root.mainloop()
