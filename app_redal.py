@@ -17,6 +17,7 @@ from PIL import Image, ImageTk
 from models.face_cls_model import FaceRecognition, face_config
 from utils.face_cls import FaceVisiblity, DeciderCenter
 from utils.top_mes import GetFaceName
+from facenet_pytorch import MTCNN
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_path)
@@ -60,6 +61,7 @@ class MMChatTkinter(tk.Frame):
             self.threading.start()
             # Initialize functions 
             self.FaceRe = FaceRecognition(face_config())
+            self.mtcnn = MTCNN(image_size=512, margin=0, keep_all=False, post_process=True)
       def __set_flags__(self):
             self.main_window_show = False
             self.face_authentication_flag = False
@@ -82,13 +84,23 @@ class MMChatTkinter(tk.Frame):
             self.introduction_label.place(x=550, y=0)
             self.introduction_label.config(text='MMChat App Introduction')
             # Functional Button Related MMchat mode
-            self.button_authentication = tk.Button(self.root, text='Authentication', font=('Arial',8),
-                        bg='white', fg='black',width=10, height=1, command=self.__button_authentication__)
-            self.button_authentication.place(x=540, y=100)
-            self.button_interaction = tk.Button(self.root, text='Interaction', font=('Arial',8),
-                        bg='white', fg='black',width=10, height=1, command=self.__button_interaction__)
-            self.button_interaction.place(x=600, y=150)
-
+            self.button_authentication = tk.Button(self.root, text='用户注册', font=('Arial',8),
+                        bg='white', fg='black',width=10, height=2, command=self.__button_authentication__)
+            self.button_authentication.place(x=580, y=300)
+            self.button_interaction = tk.Button(self.root, text='进入系统', font=('Arial',8),
+                        bg='white', fg='black',width=10, height=2, command=self.__button_interaction__)
+            self.button_interaction.place(x=680, y=300)
+            self.button_funcrelated = tk.Button(self.root, text='功能关于', font=('Arial',8),
+                        bg='white', fg='black', width=10, height=2, command=self.__button_funcrelated__) 
+            self.button_funcrelated.place(x=580, y=380)
+            self.button_exitsystem = tk.Button(self.root, text='退出系统', font=('Arial',8),
+                        bg='white', fg='black', width=10, height=2, command=self.__button_exitsystem__) 
+            self.button_exitsystem.place(x=680, y=380)
+            # Set the main app's information
+            self.Label_info = tk.Label(self.root, font=('Arial',8),bg='white', width=40, height=10)
+            self.Label_info.place(x=540, y=100)
+            self.Label_info.config(text='Welcome to MMChat App' + '\n1.MMChat是一款用于人机交互的软件系统,\n集成了一系列的多模态交互功能'
+                                   + '\n2.软件主要包括手势识别控制、语音控制、\n模型交互、环境感知等一系列功能' + '\n3.用户首先需要注册信息才可进入系统')
       def __video_loop__(self):
             while self.video_cap.isOpened():
                   ret, frame = self.video_cap.read()
@@ -100,21 +112,23 @@ class MMChatTkinter(tk.Frame):
                               # Plot the circle aera for embedding
                               cv2.circle(self.frame, (256,256), 200, (0, 0, 255), 2)
                               cv2.circle(self.frame, (256,256), 100, (0, 0, 255), 2)
-                              if DeciderCenter(frame):
-                                    # Facial Recognition 
-                                    face_emb_path = os.path.join(self.args.face_emb_savepath, 
-                                                            self.args.face_emb_jsonname)
-                                    with open(face_emb_path, 'w+',encoding='utf-8') as jf:
-                                          # Extract facial embedding and save it into json file
-                                          _, face_embedding = self.FaceRe.__extract__(frame, all_faces=False)
-                                          topmessage = GetFaceName(self.root)
-                                          # warning: the face embeding cosists list[array[]]
-                                          self.facial_info[topmessage.name] = face_embedding[0].tolist()
-                                          jf.write(json.dumps(self.facial_info, ensure_ascii=False, indent=4))
-                                    # Close Facial Authentication windows 
-                                    self.face_authentication_flag = not self.face_authentication_flag
-                                    self.main_window_show = not self.main_window_show
-                              self.frame = FaceVisiblity(self.frame)
+                              try:
+                                    if DeciderCenter(self.mtcnn, frame):
+                                          # Facial Recognition 
+                                          face_emb_path = os.path.join(self.args.face_emb_savepath, 
+                                                                  self.args.face_emb_jsonname)
+                                          with open(face_emb_path, 'w+',encoding='utf-8') as jf:
+                                                # Extract facial embedding and save it into json file
+                                                _, face_embedding = self.FaceRe.__extract__(frame, all_faces=False)
+                                                topmessage = GetFaceName(self.root)
+                                                # warning: the face embeding cosists list[array[]]
+                                                self.facial_info[topmessage.name] = face_embedding[0].tolist()
+                                                jf.write(json.dumps(self.facial_info, ensure_ascii=False, indent=4))
+                                          # Close Facial Authentication windows 
+                                          self.face_authentication_flag = not self.face_authentication_flag
+                                          self.main_window_show = not self.main_window_show
+                                    self.frame = FaceVisiblity(self.mtcnn, self.frame)
+                              except: pass
                               self.__video_show__()
 
                         elif self.gesture_control_flag: 
@@ -136,6 +150,11 @@ class MMChatTkinter(tk.Frame):
             self.face_authentication_flag = not self.face_authentication_flag
       def __button_interaction__(self):
             pass
+      def __button_funcrelated__(self):
+            pass
+      def __button_exitsystem__(self):
+            self.video_cap.release()
+            self.root.quit()
             
 
 ########################  主函数测试分析  ###########################
