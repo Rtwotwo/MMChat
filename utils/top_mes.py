@@ -39,11 +39,44 @@ class GetFaceName(tk.Frame):
 
 
 
+class CreateMessageBox(tk.Frame):
+    """Create a message box for introducing the system basic functions"""
+    def __init__(self, main_root):
+        super().__init__(main_root)
+        self.main_root = main_root
+        self.top_root = tk.Toplevel(self.main_root)
+        # Set the Related window settings
+        self.__set_widgets__()
+        # Wait for the Toplevel window to close
+        self.top_root.wait_window()
+    def __set_widgets__(self):
+        self.top_root.title('Message Information')
+        self.top_root.geometry('400x300')
+        # Set Main title
+        self.Label_title = tk.Label(self.top_root, font=('Arial, 8'), justify='center', wraplength=380, width=60, height=1)
+        self.Label_title.pack(pady=20); self.Label_title.config(text="MMChat System Functions' Information" )
+        # Set System Functions' Information
+        self.Label_Info = tk.Label(self.top_root, font=('Arial',8), justify='left',wraplength=380, width=65, height=6)
+        self.Label_Info.pack(pady=20)
+        self.Label_Info.config(text='\n  1.Gesture Control: Use your hand to control the posture of uav' + 
+                             '\n  2.Face Autherization: According to facial information to open system' + 
+                             '\n  3.Multimodal Interaction: Interact with V/LLM model for better experience' + 
+                             '\n  4.Object Detection: Use yolov5 to detect cars and people in curent environment' +
+                             '\n  5.Spectrogram Histogram: Use spectrogram and histogram about ecah frame ' +
+                             '\n  6.Image ToWorld: Use single-picture to reconstruct the world')
+        self.Button_Exit = tk.Button(self.top_root, text='Exit', font='Arial', command=lambda:self.top_root.destroy())
+        self.Button_Exit.pack(pady=20)
 
 if __name__ == '__main__':
     # Test the GetFaceName class
+    # root = tk.Tk()
+    # root.withdraw()
+    # top_message = GetFaceName(root)
+    # print("User entered name:", top_message.name)
+    # root.mainloop()
+
+    # Test the CreateMessageBox class
     root = tk.Tk()
     root.withdraw()
-    top_message = GetFaceName(root)
-    print("User entered name:", top_message.name)
+    mess_box = CreateMessageBox(root)
     root.mainloop()
