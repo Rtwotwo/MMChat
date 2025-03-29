@@ -44,6 +44,7 @@ class CreateMessageBox(tk.Frame):
     def __init__(self, main_root):
         super().__init__(main_root)
         self.main_root = main_root
+        self.Is_exit = False
         self.top_root = tk.Toplevel(self.main_root)
         # Set the Related window settings
         self.__set_widgets__()
@@ -64,8 +65,13 @@ class CreateMessageBox(tk.Frame):
                              '\n  4.Object Detection: Use yolov5 to detect cars and people in curent environment' +
                              '\n  5.Spectrogram Histogram: Use spectrogram and histogram about ecah frame ' +
                              '\n  6.Image ToWorld: Use single-picture to reconstruct the world')
-        self.Button_Exit = tk.Button(self.top_root, text='Exit', font='Arial', command=lambda:self.top_root.destroy())
+        self.Button_Exit = tk.Button(self.top_root, text='Exit', font='Arial', command=self.__exit__)
         self.Button_Exit.pack(pady=20)
+    def __exit__(self):
+        self.top_root.destroy()
+        self.Is_exit = True
+
+
 
 if __name__ == '__main__':
     # Test the GetFaceName class

@@ -16,7 +16,7 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 from models.face_cls_model import FaceRecognition, face_config
 from utils.face_cls import FaceVisiblity, DeciderCenter
-from utils.top_mes import GetFaceName
+from utils.top_mes import GetFaceName, CreateMessageBox
 from facenet_pytorch import MTCNN
 
 current_path = os.path.abspath(os.path.dirname(__file__))
@@ -65,9 +65,8 @@ class MMChatTkinter(tk.Frame):
       def __set_flags__(self):
             self.main_window_show = False
             self.face_authentication_flag = False
-            self.audio_llmchat_flag = False
-            self.environment_vlm_flag = False
-            self.gesture_control_flag = False
+            self.button_interaction_flag = False
+            self.button_funcrelated_flag = False
       def __set_params__(self):
             self.facial_info = {}
       def __widgets__(self):
@@ -131,10 +130,12 @@ class MMChatTkinter(tk.Frame):
                               except: pass
                               self.__video_show__()
 
-                        elif self.gesture_control_flag: 
-                              # Gesture Control Multimodal
-                              pass
-
+                        elif self.button_funcrelated_flag: 
+                              #Show the app functions' related information
+                              message_box = CreateMessageBox(self.root)
+                              if message_box.Is_exit: 
+                                    self.button_funcrelated_flag = not self.button_funcrelated_flag
+                                    
                         else: # No functions activated
                               self.__video_show__() 
                   else: break
@@ -151,7 +152,7 @@ class MMChatTkinter(tk.Frame):
       def __button_interaction__(self):
             pass
       def __button_funcrelated__(self):
-            pass
+            self.button_funcrelated_flag = not self.button_funcrelated_flag
       def __button_exitsystem__(self):
             self.video_cap.release()
             self.root.quit()
