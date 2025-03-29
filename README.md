@@ -39,7 +39,7 @@ MMChat is developed using python3.10, and the relevant dependencies are as follo
 
 ## 3.System Function :hourglass_flowing_sand:
 
-___Face Recognition___: We selected dlib, facenet, and face-recognition for facial recognition tasks - Python third-party libraries for recognition. But finally, face-recognition with a higher degree of integration is used for face authentication and face verification tasks. And the face recognition code is bellow and you can see the code in the [python file](./models/face_cls_model.py). Then save the obtained face name and embedding in the cache folder, and then use face verification to verify. The relevant code file can be found in the [app_tkinter.py](app_tkinter.py).
+___Face Recognition___: We selected dlib, facenet, and face-recognition for facial recognition tasks - Python third-party libraries for recognition. But finally, face-recognition with a higher degree of integration is used for face authentication and face verification tasks. And the face recognition code is bellow and you can see the code in the [python file](./models/face_cls_model.py). Then save the obtained face name and embedding in the cache folder, and then use face verification to verify. The relevant code file can be found in the [top_mes.py](utils/top_mes.py).
 
 ```python
 class FaceRecognition(object):
@@ -116,5 +116,7 @@ def ollama_generator(prompt):
             stream = False,)
       return generator['response']
 ```
+
+___Interface Design___: The interface design of the software is completed by multi-interface and multi-threading, mainly including the information registration of the [main interface](app_redal.py), the face of the identity verification interface, the password [verification function](utils/top_mes.py), the gesture drone control of the main control interface of the [system function](app_sysfunc.py), the LLM model dialogue, the environment perception of the VLM model, the environment object detection (YOLOv5) and other functions and their sub-interface design.
 
 ## Continuously updating
