@@ -145,7 +145,7 @@ class MMChatTkinter(tk.Frame):
             else: img_tk = ImageTk.PhotoImage(Image.open(self.args.coverimg_path).resize((512,512)))
             self.main_label.config(image=img_tk)
             self.main_label.image = img_tk
-            self.after(33)
+            self.after(10)
       def __button_authentication__(self):
             self.main_window_show = not self.main_window_show
             self.face_authentication_flag = not self.face_authentication_flag
