@@ -21,6 +21,7 @@ class GetFaceName(tk.Frame):
         self.top_root = tk.Toplevel(self.main_root)
         # Set the Related window settings
         self.name = None
+        self.password = None
         self.__set_widgets__()
         # Wait for the Toplevel window to close
         self.top_root.wait_window()
@@ -30,13 +31,20 @@ class GetFaceName(tk.Frame):
         self.Button_GetName = tk.Button(self.top_root, text='Get Name', font='Arial',
                         bg='white', fg='black',width=15, height=2, command=self.__GetEntryName__)
         self.Button_GetName.pack(pady=20)
+        self.Label_GetName = tk.Label(self.top_root, text='Name', font=('Arial',8), justify='left',wraplength=380, width=13, height=2)
+        self.Label_GetName.place(x=60, y=105)
         self.Entry_GetName = tk.Entry(self.top_root, font='Arial', width=15, justify='center')
         self.Entry_GetName.pack(pady=20)
+        self.Label_Password = tk.Label(self.top_root, text='Password', font=('Arial',8), justify='left',wraplength=380, width=13, height=2)
+        self.Label_Password.place(x=60, y=165)
+        self.Entry_Password = tk.Entry(self.top_root, font='Arial', width=15, justify='center')
+        self.Entry_Password.pack(pady=20)
         self.Label_Info = tk.Label(self.top_root, font='Arial', width=30, height=2)
         self.Label_Info.pack(pady=20)
         self.Label_Info.config(text='Please enter your name and then\nclick the "Get Name" button')
     def __GetEntryName__(self):
         self.name = self.Entry_GetName.get().strip()
+        self.password = self.Entry_Password.get().strip()
         if not self.name:
             self.Label_Info.config(text='Cannot get name of NoneType')
         else: self.top_root.destroy()
@@ -137,11 +145,11 @@ class LoginInterface(tk.Frame):
 
 if __name__ == '__main__':
     # Test the GetFaceName class
-    # root = tk.Tk()
-    # root.withdraw()
-    # top_message = GetFaceName(root)
-    # print("User entered name:", top_message.name)
-    # root.mainloop()
+    root = tk.Tk()
+    root.withdraw()
+    top_message = GetFaceName(root)
+    print("User entered name:", top_message.name)
+    root.mainloop()
 
     # Test the CreateMessageBox class
     # root = tk.Tk()
@@ -150,8 +158,8 @@ if __name__ == '__main__':
     # root.mainloop()
 
     # Test the LoginInterface class
-    root = tk.Tk()
-    root.withdraw()
-    login_interface = LoginInterface(root)
-    root.mainloop()
+    # root = tk.Tk()
+    # root.withdraw()
+    # login_interface = LoginInterface(root)
+    # root.mainloop()
     

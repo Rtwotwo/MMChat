@@ -39,6 +39,8 @@ def Tkinter_Config():
       parser.add_argument_group('Facial Authoriation Settings')
       parser.add_argument('--face_emb_savepath', type=str, default='./data_cached/', help='Save Facial Embedding SavePath')
       parser.add_argument('--face_emb_jsonname', type=str, default='face_emb.json', help='Save Facial Embedding JsonName')
+      parser.add_argument('--password_emb_savepath', type=str, default='./data_cached/', help='Save Password Embedding SavePath')
+      parser.add_argument('--password_emb_jsonname', type=str, default='password_emb.json', help='Save Password Embedding JsonName')
       args = parser.parse_args()
       return args
 
@@ -69,6 +71,7 @@ class MMChatTkinter(tk.Frame):
             self.button_funcrelated_flag = False
       def __set_params__(self):
             self.facial_info = {}
+            self.password_info = {}
       def __widgets__(self):
             self.root.title('MMChat-Redal')
             self.root.geometry(f'{self.args.gui_width}x{self.args.gui_height}')
@@ -114,15 +117,20 @@ class MMChatTkinter(tk.Frame):
                               try:
                                     if DeciderCenter(self.mtcnn, frame):
                                           # Facial Recognition 
-                                          face_emb_path = os.path.join(self.args.face_emb_savepath, 
-                                                                  self.args.face_emb_jsonname)
-                                          with open(face_emb_path, 'w+',encoding='utf-8') as jf:
-                                                # Extract facial embedding and save it into json file
-                                                _, face_embedding = self.FaceRe.__extract__(frame, all_faces=False)
-                                                topmessage = GetFaceName(self.root)
-                                                # warning: the face embeding cosists list[array[]]
-                                                self.facial_info[topmessage.name] = face_embedding[0].tolist()
-                                                jf.write(json.dumps(self.facial_info, ensure_ascii=False, indent=4))
+                                          self.facial_info, self.password_info = {}, {}
+                                          face_emb_path = os.path.join(self.args.face_emb_savepath, self.args.face_emb_jsonname)
+                                          password_emb_path = os.path.join(self.args.password_emb_savepath, self.args.password_emb_jsonname)
+                                          # Extract facial embedding and save it into json file
+                                          _, face_embedding = self.FaceRe.__extract__(frame, all_faces=False)
+                                          topmessage = GetFaceName(self.root)
+                                          # warning: the face embeding cosists list[array[]]
+                                          self.facial_info[topmessage.name] = face_embedding[0].tolist()
+                                          self.password_info[topmessage.name] = topmessage.password
+                                          if topmessage.name and topmessage.password is not None:
+                                                with open(face_emb_path, 'w+',encoding='utf-8') as jf:
+                                                      jf.write(json.dumps(self.facial_info, ensure_ascii=False, indent=4))
+                                                with open(password_emb_path, 'w+',encoding='utf-8') as jf:
+                                                      jf.write(json.dumps(self.password_info, ensure_ascii=False, indent=4))
                                           # Close Facial Authentication windows 
                                           self.face_authentication_flag = not self.face_authentication_flag
                                           self.main_window_show = not self.main_window_show
