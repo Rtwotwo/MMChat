@@ -69,7 +69,7 @@ class CreateMessageBox(tk.Frame):
         self.Label_title = tk.Label(self.top_root, font=('Arial, 8'), justify='center', wraplength=380, width=60, height=1)
         self.Label_title.pack(pady=20); self.Label_title.config(text="MMChat System Functions' Information" )
         # Set System Functions' Information
-        self.Label_Info = tk.Label(self.top_root, font=('Arial',8), justify='left',wraplength=380, width=65, height=6)
+        self.Label_Info = tk.Label(self.top_root, font=('Arial',8), justify='left',wraplength=380, width=65, height=8)
         self.Label_Info.pack(pady=20)
         self.Label_Info.config(text='\n  1.Gesture Control: Use your hand to control the posture of uav' + 
                              '\n  2.Face Autherization: According to facial information to open system' + 

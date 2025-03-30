@@ -18,6 +18,7 @@ from models.face_cls_model import FaceRecognition, face_config
 from utils.face_cls import FaceVisiblity, DeciderCenter
 from utils.top_mes import GetFaceName, CreateMessageBox
 from facenet_pytorch import MTCNN
+from app_authoriztion import LoginInterface
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_path)
@@ -57,6 +58,7 @@ class MMChatTkinter(tk.Frame):
             self.__set_params__()
             self.__widgets__()
             # Initialize video capture and threading
+            self.camera_lock = threading.Lock()
             self.video_cap = cv2.VideoCapture(0)
             self.threading = threading.Thread(target=self.__video_loop__)
             self.threading.daemon = True
@@ -101,11 +103,14 @@ class MMChatTkinter(tk.Frame):
             # Set the main app's information
             self.Label_info = tk.Label(self.root, font=('Arial',8),bg='white', width=40, height=10)
             self.Label_info.place(x=540, y=100)
-            self.Label_info.config(text='Welcome to MMChat App' + '\n1.MMChat是一款用于人机交互的软件系统,\n集成了一系列的多模态交互功能'
-                                   + '\n2.软件主要包括手势识别控制、语音控制、\n模型交互、环境感知等一系列功能' + '\n3.用户首先需要注册信息才可进入系统')
+            self.Label_info.config(text='Welcome to MMChat App' + 
+                                   '\n1.MMChat是一款用于人机交互的软件系统,\n集成了一系列的多模态交互功能'+ 
+                                   '\n2.软件主要包括手势识别控制、语音控制、\n模型交互、环境感知等一系列功能' + 
+                                   '\n3.用户首先需要注册信息才可进入系统')
       def __video_loop__(self):
             while self.video_cap.isOpened():
-                  ret, frame = self.video_cap.read()
+                  with self.camera_lock:  # 带锁访问摄像头
+                        ret, frame = self.video_cap.read()
                   self.frame = cv2.flip( cv2.resize(cv2.cvtColor(frame, 
                         cv2.COLOR_BGR2RGB), (512, 512)), 1 )
                   if ret: 
@@ -144,7 +149,9 @@ class MMChatTkinter(tk.Frame):
                               message_box = CreateMessageBox(self.root)
                               if message_box.Is_exit: 
                                     self.button_funcrelated_flag = not self.button_funcrelated_flag
-                                    
+
+                        elif self.button_interaction_flag:
+                              self.__video_show__()
                         else: # No functions activated
                               self.__video_show__() 
                   else: break
@@ -159,7 +166,17 @@ class MMChatTkinter(tk.Frame):
             self.main_window_show = not self.main_window_show
             self.face_authentication_flag = not self.face_authentication_flag
       def __button_interaction__(self):
-            pass
+            self.button_interaction_flag = not self.button_interaction_flag
+            login_interface = LoginInterface(self)
+            self.root.wait_window(login_interface.top_root)
+            # Restart the main interface video stream
+            self.button_interaction_flag = False
+            if not self.video_cap.isOpened():
+                  self.video_cap = cv2.VideoCapture(0)
+            # Make sure the name is recognised
+            # if succeed, destroy the login interface
+            if login_interface.name != 'Unknown':
+                  login_interface.destroy()
       def __button_funcrelated__(self):
             self.button_funcrelated_flag = not self.button_funcrelated_flag
       def __button_exitsystem__(self):

@@ -22,6 +22,7 @@ class LoginInterface(tk.Frame):
     def __init__(self, main_root):
         super().__init__(main_root)
         self.main_root = main_root
+        self.running = True
         self.face_login = False
         self.password_login = False
         self.main_window_show = False
@@ -71,9 +72,12 @@ class LoginInterface(tk.Frame):
         self.name_label = tk.Label(self.top_root, justify='center', font='Arial',wraplength=380, width=15, height=1)
         self.name_label.config(text='姓名: ' + self.name); self.name_label.place(x=520, y=10)
     def __video_loop__(self):
-        while self.video_cap.isOpened():
-            ret, frame = self.video_cap.read()
+        while self.running and self.video_cap.isOpened():
+            with self.main_root.camera_lock:  # 共享主界面的资源锁
+                if not self.video_cap.isOpened():break
+                ret, frame = self.video_cap.read()
             frame = cv2.flip( cv2.cvtColor( cv2.resize(frame, (512, 512)), cv2.COLOR_BGR2RGB ), 1 )
+            # if succeed, destroy the login interface
             if ret:
                 if self.face_login:
                     # Use for Facial Authorization
@@ -93,8 +97,9 @@ class LoginInterface(tk.Frame):
                                 if distance < min_distance:
                                     min_distance = distance
                                     self.name = name
-                            # Set threshold=0.6 to exclude strangers
-                            threshold = 0.6
+                            print(min_distance)
+                            # Set threshold=0.45 to exclude strangers
+                            threshold = 0.45
                             if min_distance > threshold:
                                 self.name = 'Unknown'
                             # Once the face is recognized, stop the loop
@@ -124,15 +129,6 @@ class LoginInterface(tk.Frame):
         except queue.Empty: pass
         self.after(10, self.__update_video__)
     def __GetPassWord__(self):
-        # self.password = self.Entry_GetPassWord.get()
-        # with open('./data_cached/password_emb.json', 'r') as f:
-        #     database_emb = json.load(f)
-        # database_emb = {p:name for name, p in database_emb.items()}
-        # print(database_emb)
-        # if self.pass_word in database_emb.keys():
-        #     self.name = database_emb[self.pass_word]
-        #     self.password_login = not self.password_login
-        # self.name_label.config(text='姓名: ' + self.name)
         self.pass_word = self.Entry_GetPassWord.get()
         with open('./data_cached/password_emb.json', 'r') as f:
             database_emb = json.load(f)
@@ -146,6 +142,10 @@ class LoginInterface(tk.Frame):
     def __PasswordLogin__(self):
         self.password_login = not self.password_login
     def __Return__(self):
+        self.running = False
+        if self.threading.is_alive():
+            # Wait for the thread to end
+            self.threading.join(timeout=1) 
         self.video_cap.release()
         self.top_root.destroy()
 
