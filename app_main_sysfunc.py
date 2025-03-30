@@ -15,12 +15,13 @@ from app_gesture_recognizer import GestureRecognizerApp
 from app_style_transfer import ImageStyleTransferApp
 
 
-class Gesture_Style_APP:
+class Gesture_Style_APP(tk.Frame):
     """手势识别-风格迁移APP
     针对不同功能的APP, 实现了三个子界面,
     并通过Combobox控件实现功能的切换."""
-    def __init__(self):
-        self.main_root = tk.Tk()
+    def __init__(self, main_root):
+        super().__init__(main_root)
+        self.main_root = main_root
         self.main_root.title("Gesture Style Recognition-Redal")
         self.main_root.geometry("600x400")
         
@@ -100,6 +101,6 @@ class Gesture_Style_APP:
 
 if __name__ == "__main__":
     # 测试代码
-    app = Gesture_Style_APP()
-    app.main_root.protocol("WM_DELETE_WINDOW", app.on_close)
+    root = tk.Tk()
+    app = Gesture_Style_APP(root)
     app.main_root.mainloop()

@@ -19,6 +19,7 @@ from utils.face_cls import FaceVisiblity, DeciderCenter
 from utils.top_mes import GetFaceName, CreateMessageBox
 from facenet_pytorch import MTCNN
 from app_authoriztion import LoginInterface
+from app_main_sysfunc import Gesture_Style_APP
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_path)
@@ -67,9 +68,11 @@ class MMChatTkinter(tk.Frame):
             self.face_authentication_flag = False
             self.button_interaction_flag = False
             self.button_funcrelated_flag = False
+            self.button_systemfunc_flag = False
       def __set_params__(self):
             self.facial_info = {}
             self.password_info = {}
+            self.name = None
       def __widgets__(self):
             self.root.title('MMChat-Redal')
             self.root.geometry(f'{self.args.gui_width}x{self.args.gui_height}')
@@ -87,7 +90,7 @@ class MMChatTkinter(tk.Frame):
             self.button_authentication = tk.Button(self.root, text='用户注册', font=('Arial',8),
                         bg='white', fg='black',width=10, height=2, command=self.__button_authentication__)
             self.button_authentication.place(x=580, y=300)
-            self.button_interaction = tk.Button(self.root, text='进入系统', font=('Arial',8),
+            self.button_interaction = tk.Button(self.root, text='身份验证', font=('Arial',8),
                         bg='white', fg='black',width=10, height=2, command=self.__button_interaction__)
             self.button_interaction.place(x=680, y=300)
             self.button_funcrelated = tk.Button(self.root, text='功能关于', font=('Arial',8),
@@ -96,6 +99,9 @@ class MMChatTkinter(tk.Frame):
             self.button_exitsystem = tk.Button(self.root, text='退出系统', font=('Arial',8),
                         bg='white', fg='black', width=10, height=2, command=self.__button_exitsystem__) 
             self.button_exitsystem.place(x=680, y=380)
+            self.button_systemfunc = tk.Button(self.root, text='系统功能', font=('Arial',8),
+                        bg='white', fg='black', width=10, height=2, command=self.__button_systemfunc__)
+            self.button_systemfunc.place(x=580, y=460)
             # Set the main app's information
             self.Label_info = tk.Label(self.root, font=('Arial',8),bg='white', width=40, height=10)
             self.Label_info.place(x=540, y=100)
@@ -169,15 +175,19 @@ class MMChatTkinter(tk.Frame):
             login_interface = LoginInterface(login_window)
             self.name = login_interface.name
             print(self.name)
-            
       def __button_funcrelated__(self):
             self.button_funcrelated_flag = not self.button_funcrelated_flag
             message_box = CreateMessageBox(self.root)
             if message_box.Is_exit: 
                   self.button_funcrelated_flag = not self.button_funcrelated_flag
+      def __button_systemfunc__(self):
+            self.button_systemfunc_flag = not self.button_systemfunc_flag
+            system_root = tk.Toplevel(self.root)
+            system_interface = Gesture_Style_APP(system_root)
       def __button_exitsystem__(self):
             self.video_cap.release()
             self.root.quit()
+
             
 
 ########################  主函数测试分析  ###########################
