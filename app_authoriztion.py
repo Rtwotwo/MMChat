@@ -19,14 +19,14 @@ from models.face_cls_model import FaceRecognition, face_config
 
 class LoginInterface(tk.Frame):
     """Create a lgoin interface for user to login"""
-    def __init__(self, main_root):
-        super().__init__(main_root)
-        self.main_root = main_root
+    def __init__(self, top_root, on_login_complete=None):
+        super().__init__(top_root)
+        self.top_root = top_root
         self.running = True
         self.face_login = False
         self.password_login = False
         self.main_window_show = False
-        self.top_root = tk.Toplevel(self.main_root)
+        self.on_login_complete = on_login_complete
         # Set the Related window settings
         self.__set_widgets__()
         self.FaceRe = FaceRecognition(face_config())
@@ -73,11 +73,8 @@ class LoginInterface(tk.Frame):
         self.name_label.config(text='姓名: ' + self.name); self.name_label.place(x=520, y=10)
     def __video_loop__(self):
         while self.running and self.video_cap.isOpened():
-            with self.main_root.camera_lock:  # 共享主界面的资源锁
-                if not self.video_cap.isOpened():break
-                ret, frame = self.video_cap.read()
+            ret, frame = self.video_cap.read()
             frame = cv2.flip( cv2.cvtColor( cv2.resize(frame, (512, 512)), cv2.COLOR_BGR2RGB ), 1 )
-            # if succeed, destroy the login interface
             if ret:
                 if self.face_login:
                     # Use for Facial Authorization
@@ -143,16 +140,14 @@ class LoginInterface(tk.Frame):
         self.password_login = not self.password_login
     def __Return__(self):
         self.running = False
-        if self.threading.is_alive():
-            # Wait for the thread to end
-            self.threading.join(timeout=1) 
         self.video_cap.release()
+        if self.on_login_complete: 
+            self.on_login_complete(self.name if self.name != 'Unknown' else None)
         self.top_root.destroy()
 
 
 if __name__ == '__main__':
     # Test the LoginInterface class
     root = tk.Tk()
-    root.withdraw()
     login_interface = LoginInterface(root)
     root.mainloop()

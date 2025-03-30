@@ -59,10 +59,6 @@ class MMChatTkinter(tk.Frame):
             self.__widgets__()
             # Initialize video capture and threading
             self.camera_lock = threading.Lock()
-            self.video_cap = cv2.VideoCapture(0)
-            self.threading = threading.Thread(target=self.__video_loop__)
-            self.threading.daemon = True
-            self.threading.start()
             # Initialize functions 
             self.FaceRe = FaceRecognition(face_config())
             self.mtcnn = MTCNN(image_size=512, margin=0, keep_all=False, post_process=True)
@@ -109,7 +105,7 @@ class MMChatTkinter(tk.Frame):
                                    '\n3.用户首先需要注册信息才可进入系统')
       def __video_loop__(self):
             while self.video_cap.isOpened():
-                  with self.camera_lock:  # 带锁访问摄像头
+                  with self.camera_lock:
                         ret, frame = self.video_cap.read()
                   self.frame = cv2.flip( cv2.resize(cv2.cvtColor(frame, 
                         cv2.COLOR_BGR2RGB), (512, 512)), 1 )
@@ -140,17 +136,9 @@ class MMChatTkinter(tk.Frame):
                                           # Close Facial Authentication windows 
                                           self.face_authentication_flag = not self.face_authentication_flag
                                           self.main_window_show = not self.main_window_show
+                                          self.video_cap.release()
                                     self.frame = FaceVisiblity(self.mtcnn, self.frame)
                               except: pass
-                              self.__video_show__()
-
-                        elif self.button_funcrelated_flag: 
-                              #Show the app functions' related information
-                              message_box = CreateMessageBox(self.root)
-                              if message_box.Is_exit: 
-                                    self.button_funcrelated_flag = not self.button_funcrelated_flag
-
-                        elif self.button_interaction_flag:
                               self.__video_show__()
                         else: # No functions activated
                               self.__video_show__() 
@@ -165,17 +153,28 @@ class MMChatTkinter(tk.Frame):
       def __button_authentication__(self):
             self.main_window_show = not self.main_window_show
             self.face_authentication_flag = not self.face_authentication_flag
+            if self.main_window_show: 
+                  self.video_cap = cv2.VideoCapture(0)
+                  self.threading = threading.Thread(target=self.__video_loop__)
+                  self.threading.daemon = True
+                  self.threading.start()
+            else: 
+                  self.main_window_show = not self.main_window_show
+                  img_tk = ImageTk.PhotoImage(Image.open(self.args.coverimg_path).resize((512,512)))
+                  self.main_label.config(image=img_tk)
+                  self.main_label.image = img_tk
       def __button_interaction__(self):
             self.button_interaction_flag = not self.button_interaction_flag
-            login_interface = LoginInterface(self)
-            self.root.wait_window(login_interface.top_root)
-            # Restart the main interface video stream
-            if not self.video_cap.isOpened():
-                  self.video_cap = cv2.VideoCapture(0)
-            if login_interface.name != 'Unknown':
-                  self.button_interaction_flag = not self.button_interaction_flag
+            login_window = tk.Toplevel(self.root)
+            login_interface = LoginInterface(login_window)
+            self.name = login_interface.name
+            print(self.name)
+            
       def __button_funcrelated__(self):
             self.button_funcrelated_flag = not self.button_funcrelated_flag
+            message_box = CreateMessageBox(self.root)
+            if message_box.Is_exit: 
+                  self.button_funcrelated_flag = not self.button_funcrelated_flag
       def __button_exitsystem__(self):
             self.video_cap.release()
             self.root.quit()
