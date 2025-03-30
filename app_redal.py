@@ -19,7 +19,7 @@ from utils.face_cls import FaceVisiblity, DeciderCenter
 from utils.top_mes import GetFaceName, CreateMessageBox
 from facenet_pytorch import MTCNN
 from app_authoriztion import LoginInterface
-from app_main_sysfunc import Gesture_Style_APP
+from app_sysfunc import Gesture_Style_APP
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_path)
@@ -95,13 +95,13 @@ class MMChatTkinter(tk.Frame):
             self.button_interaction.place(x=680, y=300)
             self.button_funcrelated = tk.Button(self.root, text='功能关于', font=('Arial',8),
                         bg='white', fg='black', width=10, height=2, command=self.__button_funcrelated__) 
-            self.button_funcrelated.place(x=580, y=380)
-            self.button_exitsystem = tk.Button(self.root, text='退出系统', font=('Arial',8),
-                        bg='white', fg='black', width=10, height=2, command=self.__button_exitsystem__) 
-            self.button_exitsystem.place(x=680, y=380)
+            self.button_funcrelated.place(x=580, y=340)
             self.button_systemfunc = tk.Button(self.root, text='系统功能', font=('Arial',8),
                         bg='white', fg='black', width=10, height=2, command=self.__button_systemfunc__)
-            self.button_systemfunc.place(x=580, y=460)
+            self.button_systemfunc.place(x=680, y=340)
+            self.button_exitsystem = tk.Button(self.root, text='退出系统', font=('Arial',8),
+                        bg='white', fg='black', width=10, height=2, command=self.__button_exitsystem__) 
+            self.button_exitsystem.place(x=580, y=380)
             # Set the main app's information
             self.Label_info = tk.Label(self.root, font=('Arial',8),bg='white', width=40, height=10)
             self.Label_info.place(x=540, y=100)
@@ -173,7 +173,6 @@ class MMChatTkinter(tk.Frame):
             self.button_interaction_flag = not self.button_interaction_flag
             login_window = tk.Toplevel(self.root)
             login_interface = LoginInterface(login_window)
-            self.name = login_interface.name
             
       def __button_funcrelated__(self):
             self.button_funcrelated_flag = not self.button_funcrelated_flag

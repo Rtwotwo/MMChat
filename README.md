@@ -37,7 +37,11 @@ MMChat is developed using python3.10, and the relevant dependencies are as follo
 - [ ] Use model pruning (Opt) or model quantization to int8/int16 to compress the model
 - [ ] If you have time to learn the flight control algorithm PID or other algorithms, optimize the system interaction experience
 
-## 3.System Function :hourglass_flowing_sand:
+## 3.Software Framework :moon:
+
+
+
+## 4.System Function :hourglass_flowing_sand:
 
 ___Face Recognition___: We selected dlib, facenet, and face-recognition for facial recognition tasks - Python third-party libraries for recognition. But finally, face-recognition with a higher degree of integration is used for face authentication and face verification tasks. And the face recognition code is bellow and you can see the code in the [python file](./models/face_cls_model.py). Then save the obtained face name and embedding in the cache folder, and then use face verification to verify. The relevant code file can be found in the [top_mes.py](utils/top_mes.py).
 

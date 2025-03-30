@@ -239,7 +239,6 @@ class GestureRecognizerApp(tk.Frame):
             self.thread = threading.Thread(target=self.video_loop)
             self.thread.daemon = True
             self.thread.start()
-    
     def __frame_plot_shape__(self, mean_xy=None, mean_z=None):
         """绘制检测手势区域, 用于后续的手势的静态识别"""
         self.frame = cv2.circle(self.frame, (200,200), 150, (0, 0, 255), 2)
@@ -262,8 +261,6 @@ class GestureRecognizerApp(tk.Frame):
             name_dict = {0:'向前', 1:'向后', 2:'向左', 3:'向右'}
             return name_dict[np.argmin(distance)]
         else: return '原地'
-        
-
     def __toggle_dynamic_mode__(self):
         """启动动态手势识别模式"""
         self.toggle_static_mode_active = False

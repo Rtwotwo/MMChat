@@ -98,7 +98,6 @@ class Gesture_Style_APP(tk.Frame):
             self.style_transfer_app.video_cap.release()
         self.main_root.quit()
 
-
 if __name__ == "__main__":
     # 测试代码
     root = tk.Tk()
