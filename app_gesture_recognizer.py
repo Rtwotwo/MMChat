@@ -17,7 +17,7 @@ from PIL import Image, ImageTk
 import torch 
 from models.gesture_cnn_lstm import GestureLSTM
 from models.gesture_transformer_lstm import VideoClassifierViT
-from utils.utils import *
+from utils.gesture_utils import *
 
 
 

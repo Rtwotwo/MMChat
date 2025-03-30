@@ -1,7 +1,8 @@
 """
-任务: 参考论文学习MetaNet结合TransformNet实现风格迁移的网络模型
-      构建相关的网络结构, 并为尝试训练模型编写工具函数
-时间: 2024/11/15-Redal
+Author: Redal
+Date: 2025/03/30
+TODO: 基于metanet元学习和transformnet的风格迁移模型
+Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import torch
 import torch.nn as nn

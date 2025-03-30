@@ -1,3 +1,9 @@
+"""
+Author: Redal
+Date: 2025/03/30
+TODO: 基于Transformer+LSTM的动态手势识别
+Homepage: https://github.com/Rtwotwo/MMchat.git
+"""
 import torch
 from torch import Tensor
 import torch.nn as nn

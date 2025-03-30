@@ -187,4 +187,3 @@ if __name__ == '__main__':
       root = tk.Tk()
       app = MMChatTkinter(root, args)
       app.mainloop()
-            

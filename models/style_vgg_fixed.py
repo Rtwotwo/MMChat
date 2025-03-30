@@ -1,7 +1,8 @@
 """
-任务: 实现固定风格固定内容的普通风格迁移, 并且将代码封装为接口函数,
-      输入epoches和image即可实现风格迁移.
-时间: 2024/11/12-Redal
+Author: Redal
+Date: 2025/03/30
+TODO: 基于Fast Neural Style Transfer的风格迁移模型
+Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import torch
 import numpy as np

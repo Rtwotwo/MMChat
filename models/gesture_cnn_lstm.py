@@ -1,6 +1,8 @@
 """
-任务: 完成手势识别LSTM动态模型的构建
-时间: 2024/10/30-Redal
+Author: Redal
+Date: 2025/03/30
+TODO: 基于CNN+LSTM的动态手势识别
+Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import torch
 import torch.nn as nn

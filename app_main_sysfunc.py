@@ -25,7 +25,6 @@ class Gesture_Style_APP:
         self.main_root.geometry("600x400")
         
         # 创建相关的四个界面
-        # self.data_collector_app = HumanGestureDataset(root=tk.Toplevel(self.main_root))
         self.gesture_recognizer_app = GestureRecognizerApp(root=tk.Toplevel(self.main_root))
         self.style_transfer_app = ImageStyleTransferApp(root=tk.Toplevel(self.main_root))
         
@@ -61,8 +60,6 @@ class Gesture_Style_APP:
         """选择相关的功能界面"""
         try: 
             function_name = self.function_select_combobox.get()
-            # if function_name == "数据采集":
-            #     self.__show_window__(self.data_collector_app)
             if function_name == "手势识别":
                 self.__show_window__(self.gesture_recognizer_app)
             elif function_name == "风格迁移":
@@ -71,14 +68,10 @@ class Gesture_Style_APP:
         
     def __show_window__(self, window):
         """隐藏所有窗口, 显示选定的窗口"""
-        # self.data_collector_app.root.withdraw()
         self.gesture_recognizer_app.root.withdraw()
         self.style_transfer_app.root.withdraw()
         
         # 释放视频捕获资源
-        # if hasattr(self.data_collector_app, 'cap') and self.data_collector_app.cap is not None:
-        #     self.data_collector_app.cap.release()
-        #     self.data_collector_app.cap = None
         if hasattr(self.gesture_recognizer_app, 'video_cap') and self.gesture_recognizer_app.video_cap is not None:
             self.gesture_recognizer_app.video_cap.release()
             self.gesture_recognizer_app.video_cap = None
@@ -89,9 +82,6 @@ class Gesture_Style_APP:
         # 显示选定的窗口
         window.root.deiconify()
         # 重新初始化视频捕获
-        # if window is self.data_collector_app:
-        #     self.data_collector_app.cap = cv2.VideoCapture(0)
-        #     self.data_collector_app.start_video_capture()
         if window is self.gesture_recognizer_app:
             self.gesture_recognizer_app.video_cap = cv2.VideoCapture(0)
             self.gesture_recognizer_app.start_video_capture()
@@ -101,8 +91,6 @@ class Gesture_Style_APP:
 
     def on_close(self):
         """关闭所有窗口并释放资源"""
-        # if hasattr(self.data_collector_app, 'cap') and self.data_collector_app.cap is not None:
-        #     self.data_collector_app.cap.release()
         if hasattr(self.gesture_recognizer_app, 'video_cap') and self.gesture_recognizer_app.video_cap is not None:
             self.gesture_recognizer_app.video_cap.release()
         if hasattr(self.style_transfer_app, 'video_cap') and self.style_transfer_app.video_cap is not None:

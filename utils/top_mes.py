@@ -67,7 +67,7 @@ class CreateMessageBox(tk.Frame):
         self.top_root.geometry('400x300')
         # Set Main title
         self.Label_title = tk.Label(self.top_root, font=('Arial, 8'), justify='center', wraplength=380, width=60, height=1)
-        self.Label_title.pack(pady=20); self.Label_title.config(text="MMChat System Functions' Information" )
+        self.Label_title.pack(pady=5); self.Label_title.config(text="MMChat System Functions' Information" )
         # Set System Functions' Information
         self.Label_Info = tk.Label(self.top_root, font=('Arial',8), justify='left',wraplength=380, width=65, height=8)
         self.Label_Info.pack(pady=20)
