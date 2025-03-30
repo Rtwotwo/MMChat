@@ -39,7 +39,15 @@ MMChat is developed using python3.10, and the relevant dependencies are as follo
 
 ## 3.Software Framework :moon:
 
+According to the project, if you would like to use the GUI interface, you can use the tkinter framework. The relevant code file can be found in the [app_redal.py](app_redal.py). The python file is main file in the project. Also, we offer a webpage python file to chat with the LLM/VLM model, which is in the [streamlit.py](streamlit.py). However, please note that after running streamlit.py, VScode IDE will automatically open the web page loading model, etc., and you need to start a conversation on the corresponding web page.
 
+```bash
+# if you want to run the GUI
+python app_redal.py
+
+# if you want to run the webpage
+streamlit run streamlit.py
+```
 
 ## 4.System Function :hourglass_flowing_sand:
 
