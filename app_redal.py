@@ -174,7 +174,7 @@ class MMChatTkinter(tk.Frame):
             login_window = tk.Toplevel(self.root)
             login_interface = LoginInterface(login_window)
             self.name = login_interface.name
-            print(self.name)
+            
       def __button_funcrelated__(self):
             self.button_funcrelated_flag = not self.button_funcrelated_flag
             message_box = CreateMessageBox(self.root)
@@ -185,7 +185,6 @@ class MMChatTkinter(tk.Frame):
             system_root = tk.Toplevel(self.root)
             system_interface = Gesture_Style_APP(system_root)
       def __button_exitsystem__(self):
-            self.video_cap.release()
             self.root.quit()
 
             
