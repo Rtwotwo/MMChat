@@ -1,7 +1,7 @@
 """
 Author: Redal
 Date: 2025/03/03
-TODO: 多模态语音、视觉、手势模型的搭建, 并且构建tkinter的GUI界面框架
+TODO: 系统函数框架设计,手动选择输入功能
 Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
@@ -170,13 +170,10 @@ class MMChatTkinter(tk.Frame):
             login_interface = LoginInterface(self)
             self.root.wait_window(login_interface.top_root)
             # Restart the main interface video stream
-            self.button_interaction_flag = False
             if not self.video_cap.isOpened():
                   self.video_cap = cv2.VideoCapture(0)
-            # Make sure the name is recognised
-            # if succeed, destroy the login interface
             if login_interface.name != 'Unknown':
-                  login_interface.destroy()
+                  self.button_interaction_flag = not self.button_interaction_flag
       def __button_funcrelated__(self):
             self.button_funcrelated_flag = not self.button_funcrelated_flag
       def __button_exitsystem__(self):
