@@ -25,6 +25,10 @@ class ModelChatApp(tk.Frame):
         self.root = root
         self.__set_cached__()
         self.__set_widgets__()
+        self.video_cap = cv2.VideoCapture(0)
+        self.video_thread = threading.Thread(target=self.__video_loop__)
+        self.video_thread.daemon = True
+        self.video_thread.start()
         self.queue = queue.Queue()
     def __set_cached__(self):
         """设置相关变量缓存"""
@@ -98,26 +102,19 @@ class ModelChatApp(tk.Frame):
         self.chat_text.tag_configure('right_red', justify='right', foreground='red')
         self.entry_mess.delete(0, tk.END)
         self.chat_text.see(tk.END)
-        # show response
+        # show response from LLM model
         self.chat_text.insert(tk.END, '\n'+llm_chat(self.prompt), 'left_blue')
         self.chat_text.tag_configure('left_blue', justify='left', foreground='blue')
         self.chat_text.see(tk.END)
     def __start_video__(self):
         """播放视频,并开启视频线程"""
         self.triggle_video_flag = not self.triggle_video_flag
-        if self.triggle_video_flag:
-            self.video_cap = cv2.VideoCapture(0)
-            self.video_thread = threading.Thread(target=self.__video_loop__)
-            self.video_thread.start()
-        else: 
-            self.video_label.config(image=self.cover_imgtk)
-            self.video_label.image = self.cover_imgtk
-            self.video_cap.release()
     def __exit__(self):
         """退出程序,清除缓存以及资源""" 
         if self.video_cap is not None:
             self.video_cap.release()
-        self.root.quit()
+        self.root.destroy()
+
 
 if __name__ == '__main__':
     root = tk.Tk()
