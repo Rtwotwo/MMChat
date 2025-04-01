@@ -18,7 +18,7 @@ from models.face_cls_model import FaceRecognition, face_config
 from utils.face_cls import FaceVisiblity, DeciderCenter
 from utils.top_mes import GetFaceName, CreateMessageBox
 from facenet_pytorch import MTCNN
-from app_authoriztion import LoginInterface
+from app_authorization import LoginInterface
 from app_sysfunc import Gesture_Style_APP
 
 current_path = os.path.abspath(os.path.dirname(__file__))
