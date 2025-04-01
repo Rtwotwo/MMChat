@@ -34,3 +34,4 @@ def DeciderCenter(mtcnn, frame, r_pixels = 100):
             abs_dis = math.sqrt(  (center_x-256)**2 + (center_y-256)**2)
             if abs_dis < r_pixels: return True
     else: return False
+    
