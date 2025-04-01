@@ -19,7 +19,7 @@ from llm_chat_model import llm_chat
 from llm_chat_model import ollama_generator
 
 ############################  定义变量解析域配置  #################################
-def config():
+def audio_text_config():
     parser = argparse.ArgumentParser(description='audio_text_model related arguments definition',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--model_type', type=str, default='small', 
@@ -127,7 +127,7 @@ def text_to_audio(args):
 if __name__ == '__main__':
     # TODO analyse the relationship between the 
     # interaction input audio and output text
-    args = config()
+    args = audio_text_config()
     audio_data = audio_recording(args)
     save_audiodata(audio_data, args)
     text = audio_to_text(args)

@@ -12,6 +12,10 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from models.llm_chat_model import ollama_generator
 from models.llm_chat_model import llm_chat
+from models.audio_text_conversion import audio_text_config
+from models.audio_text_conversion import audio_recording
+from models.audio_text_conversion import save_audiodata
+from models.audio_text_conversion import audio_to_text
 from utils.plot_sub import ComputeHistogramImage
 from utils.plot_sub import CalculateSpectrogramImage
 
@@ -25,10 +29,6 @@ class ModelChatApp(tk.Frame):
         self.root = root
         self.__set_cached__()
         self.__set_widgets__()
-        self.video_cap = cv2.VideoCapture(0)
-        self.video_thread = threading.Thread(target=self.__video_loop__)
-        self.video_thread.daemon = True
-        self.video_thread.start()
         self.queue = queue.Queue()
     def __set_cached__(self):
         """设置相关变量缓存"""
@@ -63,17 +63,29 @@ class ModelChatApp(tk.Frame):
         self.entry_mess.place(x=505, y=384)
         self.sendchat_button = tk.Button(self.root, text='发送信息', font=('Arial', 8), width=10, height=1,
                             fg='black', bg='white', command=self.__send_chat__)
-        self.sendchat_button.place(x=680, y=382)
+        self.sendchat_button.place(x=680, y=380)
+        # 相关按钮组件->第一行相关按钮
         self.audio_chat_button = tk.Button(self.root, text='语音聊天', font=('Arial', 8), width=10, height=1,
                             fg='black', bg='white', command=self.__send_chat__)
         self.audio_chat_button.place(x=505, y=405)
-        # 相关按钮组件
+        self.image_chat_button = tk.Button(self.root, text='图片交流', font=('Arial', 8), width=10, height=1,
+                            fg='black', bg='white', command=self.__send_chat__)
+        self.image_chat_button.place(x=593, y=405)
+        self.message_clear_button = tk.Button(self.root, text='清空聊天', font=('Arial', 8), width=10, height=1,
+                            fg='black', bg='white', command=self.__clear_message__)
+        self.message_clear_button.place(x=680, y=405)
+        # 相关按钮组件->第二行相关按钮
         self.triggle_video_button = tk.Button(self.root, text='播放视频', font=('Arial', 8), width=10, height=1,
                             fg='black', bg='white', command=self.__start_video__)
         self.triggle_video_button.place(x=505, y=430)
-        self.exit_button = tk.Button(self.root, text='退出', font=('Arial', 8), width=10, height=1,
+        self.screen_shot_button = tk.Button(self.root, text='截取视频', font=('Arial', 8), width=10, height=1,
+                            fg='black', bg='white', command=self.__send_chat__)
+        self.screen_shot_button.place(x=593, y=430)
+        # 相关按钮组件->第三行相关按钮
+        self.exit_button = tk.Button(self.root, text='退出系统', font=('Arial', 8), width=10, height=1,
                             fg='black', bg='white', command=self.__exit__)
         self.exit_button.place(x=505, y=455)
+
         
     def __video_loop__(self):
         while self.video_cap.isOpened():
@@ -93,8 +105,10 @@ class ModelChatApp(tk.Frame):
         self.video_label.image = image_tk
         self.histogram_label.image = image_hist_tk
         self.spectrogram_label.image = image_freq_tk
+        if not self.video_cap.isOpened():
+            self.video_label.config(image=self.cover_imgtk)
+            self.video_label.image = self.cover_imgtk
         self.after(10)
-
     def __send_chat__(self):
         """用户发送聊天信息给聊天框,信息居右"""
         self.prompt = self.entry_mess.get()
@@ -102,13 +116,25 @@ class ModelChatApp(tk.Frame):
         self.chat_text.tag_configure('right_red', justify='right', foreground='red')
         self.entry_mess.delete(0, tk.END)
         self.chat_text.see(tk.END)
-        # show response from LLM model
-        self.chat_text.insert(tk.END, '\n'+llm_chat(self.prompt), 'left_blue')
-        self.chat_text.tag_configure('left_blue', justify='left', foreground='blue')
-        self.chat_text.see(tk.END)
+        # 显示来自 LLM 模型的响应
+        if self.prompt:
+            self.chat_text.insert(tk.END, '\n'+ollama_generator(self.prompt), 'left_blue')
+            self.chat_text.tag_configure('left_blue', justify='left', foreground='blue')
+            self.chat_text.see(tk.END)
+    def __clear_message__(self):
+        """清空聊天框"""
+        self.chat_text.delete(1.0, tk.END)
+        self.chat_text.insert(tk.END, '欢迎使用MMChat-ModelChatApp\n', 'center')
+        self.chat_text.tag_configure('center', justify='center')
     def __start_video__(self):
         """播放视频,并开启视频线程"""
         self.triggle_video_flag = not self.triggle_video_flag
+        if self.triggle_video_flag:
+            self.video_cap = cv2.VideoCapture(0)
+            self.video_thread = threading.Thread(target=self.__video_loop__)
+            self.video_thread.daemon = True
+            self.video_thread.start()
+        else: self.video_cap.release()
     def __exit__(self):
         """退出程序,清除缓存以及资源""" 
         if self.video_cap is not None:

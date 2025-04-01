@@ -39,8 +39,8 @@ def config():
                           help='you can put your api key in the api_dir')
       parser.add_argument('--api_name', type=str, default='internlm_api.txt',
                           help='the name of your api key file internlm/siliconflow api key')
-      parser.add_argument('--ollama_key', type=str, default='qwen2.5:1.5b',
-                          help='use ollama deepseek-r1:1.5b / qwen2.5:1.5b / internlm2:1.8b')
+      parser.add_argument('--ollama_key', type=str, default='llava:latest',
+                          help='use ollama deepseek-r1:1.5b / qwen2.5:1.5b / internlm2:1.8b / llava:latest')
       args = parser.parse_args()
       return args
 

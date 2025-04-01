@@ -99,7 +99,7 @@ class Gesture_Style_APP(tk.Frame):
         self.main_root.quit()
 
 if __name__ == "__main__":
-    # 测试代码
+    # test code
     root = tk.Tk()
     app = Gesture_Style_APP(root)
     app.main_root.mainloop()
