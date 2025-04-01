@@ -18,6 +18,7 @@ from models.audio_text_conversion import save_audiodata
 from models.audio_text_conversion import audio_to_text
 from utils.plot_sub import ComputeHistogramImage
 from utils.plot_sub import CalculateSpectrogramImage
+from utils.plot_sub import GifPlayer
 
 
 class ModelChatApp(tk.Frame):
@@ -32,8 +33,9 @@ class ModelChatApp(tk.Frame):
         self.queue = queue.Queue()
     def __set_cached__(self):
         """设置相关变量缓存"""
-        self.video_cap = None
+        self.filename = 'assets/audio_gif/dynamic1.gif'
         self.prompt = None
+        self.video_cap = None
         self.triggle_video_flag = False
         cover = cv2.resize( cv2.imread('assets/MMChat_logo.jpg'), (500,400) )
         self.frame = cover
@@ -66,7 +68,7 @@ class ModelChatApp(tk.Frame):
         self.sendchat_button.place(x=680, y=380)
         # 相关按钮组件->第一行相关按钮
         self.audio_chat_button = tk.Button(self.root, text='语音聊天', font=('Arial', 8), width=10, height=1,
-                            fg='black', bg='white', command=self.__send_chat__)
+                            fg='black', bg='white', command=self.__audio_chat__)
         self.audio_chat_button.place(x=505, y=405)
         self.image_chat_button = tk.Button(self.root, text='图片交流', font=('Arial', 8), width=10, height=1,
                             fg='black', bg='white', command=self.__send_chat__)
@@ -84,9 +86,7 @@ class ModelChatApp(tk.Frame):
         # 相关按钮组件->第三行相关按钮
         self.exit_button = tk.Button(self.root, text='退出系统', font=('Arial', 8), width=10, height=1,
                             fg='black', bg='white', command=self.__exit__)
-        self.exit_button.place(x=505, y=455)
-
-        
+        self.exit_button.place(x=505, y=455)        
     def __video_loop__(self):
         while self.video_cap.isOpened():
             ret, frame = self.video_cap.read()
@@ -135,6 +135,12 @@ class ModelChatApp(tk.Frame):
             self.video_thread.daemon = True
             self.video_thread.start()
         else: self.video_cap.release()
+    def __audio_chat__(self):
+        """构建语音聊天功能"""
+        self.gifplayer = GifPlayer(self.root, self.video_label, self.filename)
+        self.gifplayer.__load_gif__()
+        self.gifplayer.__update_frame__()
+        
     def __exit__(self):
         """退出程序,清除缓存以及资源""" 
         if self.video_cap is not None:

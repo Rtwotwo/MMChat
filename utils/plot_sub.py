@@ -6,6 +6,7 @@ Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import cv2
 import numpy as np
+from PIL import Image, ImageTk
 
 
 def ComputeHistogramImage(frame, hist_height=200, hist_width=300):
@@ -79,3 +80,34 @@ def CalculateSpectrogramImage(frame, spec_height=200, spec_width=200):
     beta = 30    # 亮度系数
     spectrogram_color = cv2.convertScaleAbs(spectrogram_color, alpha=alpha, beta=beta)
     return spectrogram_color
+
+class GifPlayer:
+    """用于gif的动图的显示
+    :param label: 显示动图的标签组件
+    :param width/height: 动图的尺寸
+    ;param filename: gif文件名称"""
+    def __init__(self, root, video_label, filename, width=300, height=200):
+        self.root = root
+        self.video_label = video_label
+        self.current_frame = 0
+        self.gif_frames = []
+        self.filename = filename
+        self.width, self.height = width, height
+        self.__load_gif__()
+        self.__update_frame__()
+        
+    def __load_gif__(self):
+        self.gif = Image.open(self.filename)
+        try:
+            while True:
+                frame = self.gif.copy()
+                frame = frame.resize((self.width, self.height), Image.LANCZOS)
+                self.gif_frames.append(ImageTk.PhotoImage(frame))
+                self.gif.seek(len(self.gif_frames))
+        except EOFError: raise('An error occurred while loading the GIF.')
+    def __update_frame__(self):
+        if self.current_frame >= len(self.gif_frames):
+            self.current_frame = 0
+        self.video_label.configure(image=self.gif_frames[self.current_frame])
+        self.current_frame += 1
+        self.root.after(50, self.__update_frame__)
