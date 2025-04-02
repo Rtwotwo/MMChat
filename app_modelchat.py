@@ -16,6 +16,7 @@ from models.audio_text_conversion import audio_text_config
 from models.audio_text_conversion import audio_recording
 from models.audio_text_conversion import save_audiodata
 from models.audio_text_conversion import audio_to_text
+from models.audio_text_conversion import text_to_audio
 from utils.plot_sub import ComputeHistogramImage
 from utils.plot_sub import CalculateSpectrogramImage
 from utils.plot_sub import GifPlayer
@@ -103,7 +104,12 @@ class ModelChatApp(tk.Frame):
         self.object_detect_button.place(x=505, y=455)
         self.exit_button = tk.Button(self.root, text='退出系统', font=('Arial', 8), width=10, height=1,
                             fg='black', bg='white', command=self.__exit__)
-        self.exit_button.place(x=680, y=455)        
+        self.exit_button.place(x=680, y=455)
+        # 设置显示检测显示器
+        self.detect_count_text = tk.Text(self.root, font=('Arial', 8), width=40, height=8)
+        self.detect_count_text.place(x=505, y=480)
+        self.detect_count_text.insert(tk.END, 'YOLO物体检测数量\n', 'center')
+        self.detect_count_text.tag_configure('center', justify='center')
     def __video_loop__(self):
         while self.video_cap.isOpened():
             ret, frame = self.video_cap.read()
@@ -112,7 +118,22 @@ class ModelChatApp(tk.Frame):
                 self.frame = frame
                 if self.object_detect_flag: 
                     self.frame = self.obd.__detect__(self.frame)
-                    # print(self.obd.__count__())
+                    # 更新self.detec_count_text的检测数目的计算
+                    # detect_answer_str = [f'{k}:{v}' for k, v in self.obd.__count__().items()]
+                    # detect_answer_str = ''.join([f'{x}\n' if (i+1)%2==0 else f'{x}\n' for i,x 
+                    #                            in enumerate(detect_answer_str)]).split(',')[0]
+                    # 清除前一帧数据
+                    self.detect_count_text.delete(1.0, tk.END)
+                    self.detect_count_text.insert(tk.END, 'YOLO物体检测数量\n', 'center')
+                    self.detect_count_text.tag_configure('center', justify='center')
+                    # 插入当前帧数据, 信息分局两侧展示
+                    for k,v in self.obd.__count__().items():
+                        self.detect_count_text.tag_configure("tab", tabs=(25,))
+                        self.detect_count_text.tag_configure('left_red', justify='left', foreground='red')
+                        self.detect_count_text.insert(tk.END, f'{k}\t\t\t\t{v}\n', {'left_red','tab'})
+                        self.detect_count_text.see(tk.END)
+                    # self.detect_count_text.insert(tk.END, detect_answer_str,  'center_red')
+                    # self.detect_count_text.tag_configure('center_red', justify='center', foreground='red')
                 self.__video_show__()
             else:break
     def __video_show__(self):
@@ -139,7 +160,6 @@ class ModelChatApp(tk.Frame):
         # 显示来自 LLM 模型的响应
         if self.prompt:
             threading.Thread(target=self.__llmchat_response__, daemon=True).start()
-            
     def __llmchat_response__(self):
         """LLM模型响应,单独开启增加线程实现并发"""
         self.chat_text.insert(tk.END, '\n'+ollama_generator(self.prompt), 'left_blue')
@@ -164,11 +184,28 @@ class ModelChatApp(tk.Frame):
         self.gif_player_flag = not self.gif_player_flag
         if self.gif_player_flag:
             # 播放Gif动画
-            self.gifplayer = GifPlayer(self.root, self.video_label, self.filename)            
+            self.gifplayer = GifPlayer(self.root, self.video_label, self.filename)  
+            threading.Thread(target=self.__audio_text_conversation__, daemon=True).start()
         else:
             self.gifplayer.__stop__()
             self.video_label.config(image=self.cover_imgtk)
             self.video_label.image = self.cover_imgtk
+    def __audio_text_conversation__(self):
+        """语音转文字,文字转语音,实现语音聊天"""
+        args = audio_text_config()
+        # 实现语音转文字
+        audio_data = audio_recording(args)
+        save_audiodata(audio_data, args)
+        self.prompt = audio_to_text(args)
+        self.chat_text.insert(tk.END, '\n'+self.prompt, 'right_red')
+        self.chat_text.tag_configure('right_red', justify='right', foreground='red')
+        self.chat_text.see(tk.END)
+        if self.prompt:
+            threading.Thread(target=self.__llmchat_response__, daemon=True).start()
+        # 实现文字转语音
+        # text_prompt = ollama_generator(audio_prompt)
+        # text_to_audio(text_prompt, args)
+        # 播放语音
     def __screen_shot__(self):
         """截取视频并保存为图片,并在over_video_label中展示"""
         if self.video_cap is not None:

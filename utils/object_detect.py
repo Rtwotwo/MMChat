@@ -26,8 +26,9 @@ class ObjectDetect(object):
     def __count__(self):
         """统计检测到的物体类别名称以及数量"""
         result = self.results[0]
+        self.cls_counts = {}
         for box in result.boxes:
-            cls_index = (result.cls.item()) 
+            cls_index = (box.cls.item()) 
             cls_name = result.names[cls_index]
             if cls_name not in self.cls_counts:
                 self.cls_counts[cls_name] = 1
