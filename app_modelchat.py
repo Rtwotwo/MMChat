@@ -112,6 +112,7 @@ class ModelChatApp(tk.Frame):
                 self.frame = frame
                 if self.object_detect_flag: 
                     self.frame = self.obd.__detect__(self.frame)
+                    # print(self.obd.__count__())
                 self.__video_show__()
             else:break
     def __video_show__(self):
@@ -137,9 +138,13 @@ class ModelChatApp(tk.Frame):
         self.chat_text.see(tk.END)
         # 显示来自 LLM 模型的响应
         if self.prompt:
-            self.chat_text.insert(tk.END, '\n'+ollama_generator(self.prompt), 'left_blue')
-            self.chat_text.tag_configure('left_blue', justify='left', foreground='blue')
-            self.chat_text.see(tk.END)
+            threading.Thread(target=self.__llmchat_response__, daemon=True).start()
+            
+    def __llmchat_response__(self):
+        """LLM模型响应,单独开启增加线程实现并发"""
+        self.chat_text.insert(tk.END, '\n'+ollama_generator(self.prompt), 'left_blue')
+        self.chat_text.tag_configure('left_blue', justify='left', foreground='blue')
+        self.chat_text.see(tk.END)
     def __clear_message__(self):
         """清空聊天框"""
         self.chat_text.delete(1.0, tk.END)
