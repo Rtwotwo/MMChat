@@ -19,6 +19,7 @@ from models.audio_text_conversion import audio_to_text
 from utils.plot_sub import ComputeHistogramImage
 from utils.plot_sub import CalculateSpectrogramImage
 from utils.plot_sub import GifPlayer
+from utils.object_detect import ObjectDetect
 
 
 class ModelChatApp(tk.Frame):
@@ -41,8 +42,10 @@ class ModelChatApp(tk.Frame):
         self.over_video_label = None
         self.triggle_video_flag = False
         self.gif_player_flag = False
+        self.object_detect_flag = False
         cover = cv2.resize( cv2.imread('assets/MMChat_logo.jpg'), (500,400) )
         self.frame = cover
+        self.obd = ObjectDetect()
         self.cover_imgtk = ImageTk.PhotoImage( Image.fromarray( cover) )
     def __set_widgets__(self):
         """设置界面组件与整体布局"""
@@ -54,6 +57,10 @@ class ModelChatApp(tk.Frame):
         self.video_label.place(x=0, y=0)
         self.video_label.config(image=self.cover_imgtk)
         self.video_label.image = self.cover_imgtk
+        # 创建组件self.over_screen_shot_label组件
+        self.over_video_label = tk.Label(self.root, font=('Arial', 8), width=100, height=100,
+                        fg='black', bg='white', justify='center', wraplength='200')
+        self.over_video_label.place_forget()
         self.histogram_label = tk.Label(self.root, font=('Arial', 8), width=300, height=200,
                             fg='black', bg='white', justify='center', wraplength='200')
         self.histogram_label.place(x=0, y=400)
@@ -91,15 +98,20 @@ class ModelChatApp(tk.Frame):
                             fg='black', bg='white', command=self.__clear_shot__)
         self.clear_shot_button.place(x=680, y=430)
         # 相关按钮组件->第三行相关按钮
+        self.object_detect_button = tk.Button(self.root, text='物体检测', font=('Arial', 8), width=10, height=1,
+                            fg='black', bg='white', command=self.__object_detect__)
+        self.object_detect_button.place(x=505, y=455)
         self.exit_button = tk.Button(self.root, text='退出系统', font=('Arial', 8), width=10, height=1,
                             fg='black', bg='white', command=self.__exit__)
-        self.exit_button.place(x=505, y=455)        
+        self.exit_button.place(x=680, y=455)        
     def __video_loop__(self):
         while self.video_cap.isOpened():
             ret, frame = self.video_cap.read()
             frame = cv2.flip( cv2.resize( cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (500,400) ), 1)
             if ret: 
                 self.frame = frame
+                if self.object_detect_flag: 
+                    self.frame = self.obd.__detect__(self.frame)
                 self.__video_show__()
             else:break
     def __video_show__(self):
@@ -146,29 +158,32 @@ class ModelChatApp(tk.Frame):
         """构建语音聊天功能"""
         self.gif_player_flag = not self.gif_player_flag
         if self.gif_player_flag:
-            self.gifplayer = GifPlayer(self.root, self.video_label, self.filename)
+            # 播放Gif动画
+            self.gifplayer = GifPlayer(self.root, self.video_label, self.filename)            
         else:
             self.gifplayer.__stop__()
-            del self.gifplayer
             self.video_label.config(image=self.cover_imgtk)
             self.video_label.image = self.cover_imgtk
     def __screen_shot__(self):
         """截取视频并保存为图片,并在over_video_label中展示"""
-        if self.video_cap.isOpened():
-            # 创建组件self.over_screen_shot_label组件
-            self.over_video_label = tk.Label(self.root, font=('Arial', 8), width=100, height=100,
-                            fg='black', bg='white', justify='center', wraplength='200')
+        if self.video_cap is not None:
             self.over_video_label.place(x=400, y=300)
             # 截取视频帧
             self.screen_shot_frame = cv2.resize( self.frame, (100,100) )
             self.screen_shot_imgtk = ImageTk.PhotoImage(Image.fromarray(self.screen_shot_frame))
             self.over_video_label.config(image=self.screen_shot_imgtk)
             self.over_video_label.image = self.screen_shot_imgtk
+        else:
+            # 隐藏上显示label
+            self.over_video_label.place_forget()
     def __clear_shot__(self):
         """清除截图销毁over_video_label组件"""
         if self.over_video_label is not None:
-            self.over_video_label.config(image=None)
-            self.over_video_label.destroy()
+            self.over_video_label.place_forget()
+    def __object_detect__(self):
+        """使用YOLOv11进行物体检测"""
+        if self.video_cap:
+            self.object_detect_flag = not self.object_detect_flag
     def __exit__(self):
         """退出程序,清除缓存以及资源""" 
         if self.video_cap is not None:
