@@ -34,9 +34,13 @@ class ModelChatApp(tk.Frame):
     def __set_cached__(self):
         """设置相关变量缓存"""
         self.filename = 'assets/audio_gif/dynamic1.gif'
+        self.frame = None
         self.prompt = None
         self.video_cap = None
+        self.screen_shot_frame = None
+        self.over_video_label = None
         self.triggle_video_flag = False
+        self.gif_player_flag = False
         cover = cv2.resize( cv2.imread('assets/MMChat_logo.jpg'), (500,400) )
         self.frame = cover
         self.cover_imgtk = ImageTk.PhotoImage( Image.fromarray( cover) )
@@ -81,8 +85,11 @@ class ModelChatApp(tk.Frame):
                             fg='black', bg='white', command=self.__start_video__)
         self.triggle_video_button.place(x=505, y=430)
         self.screen_shot_button = tk.Button(self.root, text='截取视频', font=('Arial', 8), width=10, height=1,
-                            fg='black', bg='white', command=self.__send_chat__)
+                            fg='black', bg='white', command=self.__screen_shot__)
         self.screen_shot_button.place(x=593, y=430)
+        self.clear_shot_button = tk.Button(self.root, text='清除截图', font=('Arial', 8), width=10, height=1,
+                            fg='black', bg='white', command=self.__clear_shot__)
+        self.clear_shot_button.place(x=680, y=430)
         # 相关按钮组件->第三行相关按钮
         self.exit_button = tk.Button(self.root, text='退出系统', font=('Arial', 8), width=10, height=1,
                             fg='black', bg='white', command=self.__exit__)
@@ -137,10 +144,31 @@ class ModelChatApp(tk.Frame):
         else: self.video_cap.release()
     def __audio_chat__(self):
         """构建语音聊天功能"""
-        self.gifplayer = GifPlayer(self.root, self.video_label, self.filename)
-        self.gifplayer.__load_gif__()
-        self.gifplayer.__update_frame__()
-        
+        self.gif_player_flag = not self.gif_player_flag
+        if self.gif_player_flag:
+            self.gifplayer = GifPlayer(self.root, self.video_label, self.filename)
+        else:
+            self.gifplayer.__stop__()
+            del self.gifplayer
+            self.video_label.config(image=self.cover_imgtk)
+            self.video_label.image = self.cover_imgtk
+    def __screen_shot__(self):
+        """截取视频并保存为图片,并在over_video_label中展示"""
+        if self.video_cap.isOpened():
+            # 创建组件self.over_screen_shot_label组件
+            self.over_video_label = tk.Label(self.root, font=('Arial', 8), width=100, height=100,
+                            fg='black', bg='white', justify='center', wraplength='200')
+            self.over_video_label.place(x=400, y=300)
+            # 截取视频帧
+            self.screen_shot_frame = cv2.resize( self.frame, (100,100) )
+            self.screen_shot_imgtk = ImageTk.PhotoImage(Image.fromarray(self.screen_shot_frame))
+            self.over_video_label.config(image=self.screen_shot_imgtk)
+            self.over_video_label.image = self.screen_shot_imgtk
+    def __clear_shot__(self):
+        """清除截图销毁over_video_label组件"""
+        if self.over_video_label is not None:
+            self.over_video_label.config(image=None)
+            self.over_video_label.destroy()
     def __exit__(self):
         """退出程序,清除缓存以及资源""" 
         if self.video_cap is not None:

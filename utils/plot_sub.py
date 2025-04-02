@@ -85,29 +85,41 @@ class GifPlayer:
     """用于gif的动图的显示
     :param label: 显示动图的标签组件
     :param width/height: 动图的尺寸
-    ;param filename: gif文件名称"""
-    def __init__(self, root, video_label, filename, width=300, height=200):
+    :param filename: gif文件名称"""
+    def __init__(self, root, video_label, filename, width=500, height=400):
         self.root = root
         self.video_label = video_label
         self.current_frame = 0
         self.gif_frames = []
+        self.after_id = None
         self.filename = filename
         self.width, self.height = width, height
         self.__load_gif__()
         self.__update_frame__()
-        
+
     def __load_gif__(self):
-        self.gif = Image.open(self.filename)
         try:
+            self.gif = Image.open(self.filename)
             while True:
                 frame = self.gif.copy()
-                frame = frame.resize((self.width, self.height), Image.LANCZOS)
-                self.gif_frames.append(ImageTk.PhotoImage(frame))
+                # 调整帧的大小并创建 PhotoImage 对象
+                resized_frame = frame.resize((self.width, self.height), Image.LANCZOS)
+                photo = ImageTk.PhotoImage(resized_frame)
+                self.gif_frames.append(photo)
                 self.gif.seek(len(self.gif_frames))
-        except EOFError: raise('An error occurred while loading the GIF.')
+        except EOFError: pass  # 到达最后一帧时正常结束循环
     def __update_frame__(self):
         if self.current_frame >= len(self.gif_frames):
             self.current_frame = 0
         self.video_label.configure(image=self.gif_frames[self.current_frame])
         self.current_frame += 1
-        self.root.after(50, self.__update_frame__)
+        self.after_id = self.root.after(50, self.__update_frame__)
+    def __pause__(self):
+        if self.after_id is not None:
+            self.root.after_cancel(self.after_id)
+            self.is_playing = False
+    def __stop__(self):
+        self.__pause__()
+        self.gif_frames = []
+        self.current_frame = 0
+        self.video_label.config(image=None)
