@@ -47,6 +47,7 @@ class ModelChatApp(tk.Frame):
         cover = cv2.resize( cv2.imread('assets/MMChat_logo.jpg'), (500,400) )
         self.frame = cover
         self.obd = ObjectDetect(detect_model='yolo11x.pt', seg_model='yolo11l-seg.pt')
+        self.obd = ObjectDetect()
         self.cover_imgtk = ImageTk.PhotoImage( Image.fromarray( cover) )
     def __set_widgets__(self):
         """设置界面组件与整体布局"""
@@ -195,6 +196,8 @@ class ModelChatApp(tk.Frame):
         else:
             self.gifplayer.__stop__()
             self.audio_gif_label.place_forget()
+            self.gifplayer = GifPlayer(self.root, self.video_label, self.filename)  
+            threading.Thread(target=self.__audio_text_conversation__, daemon=True).start()
     def __audio_text_conversation__(self):
         """语音转文字,文字转语音,实现语音聊天"""
         args = audio_text_config()
