@@ -16,10 +16,6 @@ class ObjectDetect(object):
     def __init__(self, detect_model = 'yolo11l.pt', seg_model = 'yolo11l-seg.pt'):
         self.detect_model = YOLO(detect_model).to(device)
         self.seg_model = YOLO(seg_model).to(device)
-    def __init__(self, model_selection = 'yolo11l.pt'):
-        self.model = YOLO('yolo11l.pt').to(device)
-        self.results = None
-        self.cls_counts = {}
     def __detect__(self, frame):
         """单纯检测图像中的物体，返回检测后的图像"""
         self.results = self.detect_model(frame)
@@ -28,8 +24,6 @@ class ObjectDetect(object):
     def __segmentation__(self, frame):
         """对检测到的物体进行分割，返回分割后的图像"""
         self.results = self.seg_model(frame)
-        frame_resized = cv2.resize(frame, (640, 640))
-        self.results = self.model(frame)
         annotated_frame = self.results[0].plot()
         return annotated_frame
     def __count__(self):
