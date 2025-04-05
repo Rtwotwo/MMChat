@@ -1,0 +1,11 @@
+# 忽略API文档文件
+api/
+
+# 忽略课程资料文件
+# source/
+
+# 忽略权重文件上传
+weights/
+
+# 忽略state_dict文件
+state_dict/

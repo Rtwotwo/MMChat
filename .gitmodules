@@ -1,0 +1,9 @@
+[submodule "quant/llama.cpp"]
+	path = quant/llama.cpp
+	url = https://github.com/ggerganov/llama.cpp
+[submodule "agent/blender-mcp"]
+	path = agent/blender-mcp
+	url = https://github.com/ahujasid/blender-mcp.git
+[submodule "MiDaS"]
+	path = MiDaS
+	url = https://github.com/isl-org/MiDaS.git
