@@ -136,6 +136,6 @@ if __name__ == '__main__':
     print(f'====The text is: {text}====')
 
     response_text = ollama_generator(text)
-    with open(r'data_cached\audio_to_text.txt', 'w', encoding='utf-8') as f:
+    with open('data_cached/audio_to_text.txt', 'w', encoding='utf-8') as f:
         f.write(response_text)
     text_to_audio(args)

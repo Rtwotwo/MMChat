@@ -21,6 +21,7 @@ from utils.plot_sub import ComputeHistogramImage
 from utils.plot_sub import CalculateSpectrogramImage
 from utils.plot_sub import GifPlayer
 from utils.object_detect import ObjectDetect
+from utils.vlm_prompt import ollama_multimodal
 
 
 class ModelChatApp(tk.Frame):
@@ -44,6 +45,7 @@ class ModelChatApp(tk.Frame):
         self.triggle_video_flag = False
         self.gif_player_flag = False
         self.object_detect_flag = False
+        self.image_chat_flag = False
         cover = cv2.resize( cv2.imread('assets/MMChat_logo.jpg'), (500,400) )
         self.frame = cover
         self.obd = ObjectDetect(detect_model='yolo11x.pt', seg_model='yolo11x-seg.pt')
@@ -83,7 +85,7 @@ class ModelChatApp(tk.Frame):
                             fg='black', bg='white', command=self.__audio_chat__)
         self.audio_chat_button.place(x=505, y=405)
         self.image_chat_button = tk.Button(self.root, text='图片交流', font=('Arial', 8), width=10, height=1,
-                            fg='black', bg='white', command=self.__send_chat__)
+                            fg='black', bg='white', command=lambda: threading.Thread(target=self.__image_chat__, daemon=True).start())
         self.image_chat_button.place(x=593, y=405)
         self.message_clear_button = tk.Button(self.root, text='清空聊天', font=('Arial', 8), width=10, height=1,
                             fg='black', bg='white', command=self.__clear_message__)
@@ -226,6 +228,32 @@ class ModelChatApp(tk.Frame):
         else:
             # 隐藏上显示label
             self.over_video_label.place_forget()
+    def __image_chat__(self):
+        """图片聊天功能,获取视频帧图像并直接显示在截屏处"""
+        self.image_chat_flag = not self.image_chat_flag
+        if self.image_chat_flag:
+            # 截取视频帧
+            self.screen_shot_frame = cv2.resize( self.frame, (100,100) )
+            self.screen_shot_imgtk = ImageTk.PhotoImage(Image.fromarray(self.screen_shot_frame))
+            self.over_video_label.config(image=self.screen_shot_imgtk)
+            self.over_video_label.image = self.screen_shot_imgtk
+            # 进行获取用户提示
+            args = audio_text_config()
+            audio_data = audio_recording(args)
+            save_audiodata(audio_data, args)
+            self.prompt = audio_to_text(args)
+            self.chat_text.insert(tk.END, '\n'+self.prompt, 'right_red')
+            self.chat_text.tag_configure('right_red', justify='right', foreground='red')
+            self.chat_text.see(tk.END)
+            # 进行图像交流
+            if self.prompt and self.frame is not None:
+                response = ollama_multimodal(
+                    frame=self.frame,
+                    prompt=self.prompt,
+                    temperature=0.7,
+                    max_tokens=1000)
+                self.chat_text.insert(tk.END, '\n'+response, 'left_blue')
+                self.chat_text.tag_configure('left_blue', justify='left', foreground='blue')
     def __clear_shot__(self):
         """清除截图销毁over_video_label组件"""
         if self.over_video_label is not None:
