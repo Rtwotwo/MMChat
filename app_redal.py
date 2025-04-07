@@ -24,6 +24,7 @@ from app_sysfunc import Gesture_Style_APP
 current_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_path)
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 
@@ -36,7 +37,7 @@ def Tkinter_Config():
       parser.add_argument_group('GUI Main Window Settings')
       parser.add_argument('--gui_title', type=str, default='MMChat', help='The title of the GUI window')
       parser.add_argument('--gui_width', type=str, default='800', help='The width of the GUI window')
-      parser.add_argument('--gui_height', type=str, default='600', help='The height of the GUI window')
+      parser.add_argument('--gui_height', type=str, default='512', help='The height of the GUI window')
       parser.add_argument('--coverimg_path', type=str, default='assets/MMChat_app.jpg', help='The audio shower of the GUI window')
       parser.add_argument_group('Facial Authoriation Settings')
       parser.add_argument('--face_emb_savepath', type=str, default='./data_cached/', help='Save Facial Embedding SavePath')
