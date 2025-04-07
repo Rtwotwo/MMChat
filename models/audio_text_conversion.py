@@ -6,6 +6,7 @@ TODO: 构建音频-文本互相转换的基础模型,配置调用接口
 Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
+os.environ["PATH"] += os.pathsep + r'D:\DataAPPs\VS Code\ffmpeg\bin'
 import argparse
 import whisper
 from gtts import gTTS 
@@ -17,6 +18,7 @@ import numpy as np
 import webrtcvad 
 from llm_chat_model import llm_chat
 from llm_chat_model import ollama_generator
+
 
 ############################  定义变量解析域配置  #################################
 def audio_text_config():
