@@ -176,7 +176,6 @@ class ModelChatApp(tk.Frame):
         with open('data_cached/audio_to_text.txt', 'w', encoding='utf-8') as f:
             f.write(response)
         text_to_audio(audio_text_config())
-        self.stop_event.set()
     def __clear_message__(self):
         """清空聊天框"""
         self.chat_text.delete(1.0, tk.END)
@@ -199,7 +198,6 @@ class ModelChatApp(tk.Frame):
             self.audio_gif_label.place(x=0, y=0)
             self.gifplayer = GifPlayer(self.root, self.audio_gif_label, self.filename,
                                        width=100, height=100)  
-            self.stop_event = threading.Event()
             threading.Thread(target=self.__audio_text_conversation__, daemon=True).start()
         else:
             self.gifplayer.__stop__()
@@ -237,6 +235,7 @@ class ModelChatApp(tk.Frame):
             self.screen_shot_imgtk = ImageTk.PhotoImage(Image.fromarray(self.screen_shot_frame))
             self.over_video_label.config(image=self.screen_shot_imgtk)
             self.over_video_label.image = self.screen_shot_imgtk
+            self.over_video_label.place(x=400, y=300)
             # 进行获取用户提示
             args = audio_text_config()
             audio_data = audio_recording(args)
