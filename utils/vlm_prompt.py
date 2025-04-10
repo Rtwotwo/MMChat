@@ -25,7 +25,9 @@ def ollama_multimodal(
     # 将图像转换为 Base64 字符串 
     _, img_encoded = cv2.imencode('.jpg',  frame)
     img_base64 = base64.b64encode(img_encoded).decode('utf-8')
-    
+    with open('./api/content.txt', 'r', encoding='utf-8') as f:
+            content = f.read()
+    prompt = f"""请按照上述的要求回答{content}以下问题：{prompt}"""
     response = ollama.generate( 
         model="llava:latest",
         prompt=prompt,

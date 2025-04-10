@@ -229,8 +229,11 @@ class ModelChatApp(tk.Frame):
     def __image_chat__(self):
         """图片聊天功能,获取视频帧图像并直接显示在截屏处"""
         self.image_chat_flag = not self.image_chat_flag
-        if self.image_chat_flag:
+        if self.image_chat_flag and self.video_cap is not None:
             # 截取视频帧
+            self.audio_gif_label.place(x=0, y=0)
+            self.gifplayer = GifPlayer(self.root, self.audio_gif_label, self.filename,
+                                       width=100, height=100)  
             self.screen_shot_frame = cv2.resize( self.frame, (100,100) )
             self.screen_shot_imgtk = ImageTk.PhotoImage(Image.fromarray(self.screen_shot_frame))
             self.over_video_label.config(image=self.screen_shot_imgtk)
@@ -249,10 +252,15 @@ class ModelChatApp(tk.Frame):
                 response = ollama_multimodal(
                     frame=self.frame,
                     prompt=self.prompt,
-                    temperature=0.7,
+                    temperature=0.9,
                     max_tokens=1000)
                 self.chat_text.insert(tk.END, '\n'+response, 'left_blue')
                 self.chat_text.tag_configure('left_blue', justify='left', foreground='blue')
+            # 实现文字转语音
+            with open('data_cached/audio_to_text.txt', 'w', encoding='utf-8') as f:
+                f.write(response)
+            text_to_audio(audio_text_config())
+            self.audio_gif_label.place_forget()
     def __clear_shot__(self):
         """清除截图销毁over_video_label组件"""
         if self.over_video_label is not None:
