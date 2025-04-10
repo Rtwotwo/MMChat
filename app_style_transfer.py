@@ -62,7 +62,7 @@ class ImageStyleTransferApp(tk.Frame):
         self.frame_label = tk.Label(self.root, text="Image Style Transfer")
         self.frame_label.place(x=0, y=0, width=400, height=400)
         iron_paths = [os.path.join("image_output", filename) for filename in os.listdir("image_output")]
-        self.frame_initial_image = cv2.resize(cv2.cvtColor(cv2.imread(random.choice(iron_paths), cv2.COLOR_BGR2RGB), (400,400)))
+        self.frame_initial_image = cv2.resize(cv2.cvtColor(cv2.imread(random.choice(iron_paths)), cv2.COLOR_BGR2RGB), (400,400))
         self.frame_initial_image = ImageTk.PhotoImage(Image.fromarray(self.frame_initial_image))
         self.frame_label.config(image=self.frame_initial_image)
         self.frame_label.image = self.frame_initial_image
