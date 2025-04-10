@@ -4,6 +4,8 @@ Date: 2025/03/03
 TODO: 实现图片风格迁移的APP, 包括静态图片的风格迁移和动态视频帧的风格迁移
 Homepage: https://github.com/Rtwotwo/MMchat.git
 """
+import os
+import random
 import cv2
 import torch
 import numpy as np
@@ -59,8 +61,8 @@ class ImageStyleTransferApp(tk.Frame):
         """定义界面控件"""
         self.frame_label = tk.Label(self.root, text="Image Style Transfer")
         self.frame_label.place(x=0, y=0, width=400, height=400)
-        self.frame_initial_image = cv2.resize(cv2.cvtColor(cv2.imread(
-            'assets/MMChat_app.jpg'), cv2.COLOR_BGR2RGB), (400,400))
+        iron_paths = [os.path.join("image_output", filename) for filename in os.listdir("image_output")]
+        self.frame_initial_image = cv2.resize(cv2.cvtColor(cv2.imread(random.choice(iron_paths), cv2.COLOR_BGR2RGB), (400,400)))
         self.frame_initial_image = ImageTk.PhotoImage(Image.fromarray(self.frame_initial_image))
         self.frame_label.config(image=self.frame_initial_image)
         self.frame_label.image = self.frame_initial_image

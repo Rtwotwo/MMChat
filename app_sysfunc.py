@@ -44,9 +44,11 @@ class Gesture_Style_APP(tk.Frame):
 
         self.main_root_label_iron = tk.Label(self.main_root, width=400, height=400)
         self.main_root_label_iron.place(x=0, y=0)
-        iron_dir_path = r'image_output'
-        self.iron_paths = [os.path.join(iron_dir_path, file) for file in os.listdir(iron_dir_path)]
-        self.load_image(random.choice(self.iron_paths), self.main_root_label_iron)
+        # iron_dir_path = r'image_output'
+        iron_dir_path = 'assets/MMChat_logo.jpg'
+        # self.iron_paths = [os.path.join(iron_dir_path, file) for file in os.listdir(iron_dir_path)]
+        # self.load_image(random.choice(self.iron_paths), self.main_root_label_iron)
+        self.load_image(iron_dir_path, self.main_root_label_iron)
         
         self.main_root_exit_button = tk.Button(self.main_root, text='退出系统', command=self.main_root.quit)
         self.main_root_exit_button.place(x=420, y=20, width=80, height=30)
