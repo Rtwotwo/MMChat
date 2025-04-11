@@ -44,7 +44,7 @@ class LoginInterface(tk.Frame):
         self.top_root.protocol("WM_DELETE_WINDOW", self.__Return__)
     def __set_widgets__(self):
         self.frame = None
-        self.name = 'UnKnown'
+        self.name = 'None'
         self.pass_word = None
         self.face_embedding = None
         self.top_root.title('Login Interface')
@@ -98,18 +98,20 @@ class LoginInterface(tk.Frame):
                             # Set threshold=0.45 to exclude strangers
                             threshold = 0.45
                             if min_distance > threshold:
-                                self.name = 'Unknown'
+                                self.name = 'None'
                             # Once the face is recognized, stop the loop
-                            if self.name != 'Unknown': self.face_login = not self.face_login
-                        else: self.name = 'UnKnown'
-                    self.frame_queue.put(frame)
+                            if self.name != 'None': self.face_login = not self.face_login
+                        else: self.name = 'None'
+                    self.frame_queue.put(frame) 
 
                 elif self.password_login:
                     # Use for Password Authorization
                     self.main_label.config(text='请输入密码')
                 else:
-                    if self.name != 'Unknown':
+                    if self.name != 'None':
                         self.name_label.config(text='姓名: ' + self.name)
+                        with open('./data_cached/detected_user.txt', 'w') as f:
+                            f.write(self.name)
                     self.frame = frame
                     self.frame_queue.put(self.frame)
             else: break
@@ -134,6 +136,8 @@ class LoginInterface(tk.Frame):
             self.name = database_emb[self.pass_word]
             self.password_login = not self.password_login
             self.name_label.config(text=f'姓名: {self.name}')
+            with open('./data_cached/detected_user.txt', 'w') as f:
+                    f.write(self.name)
     def __FaceLogin__(self):
         self.face_login = not self.face_login
     def __PasswordLogin__(self):
@@ -142,7 +146,7 @@ class LoginInterface(tk.Frame):
         self.running = False
         self.video_cap.release()
         if self.on_login_complete: 
-            self.on_login_complete(self.name if self.name != 'Unknown' else None)
+            self.on_login_complete(self.name if self.name != 'None' else None)
         self.top_root.destroy()
 
 

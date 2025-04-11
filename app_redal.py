@@ -9,6 +9,7 @@ import json
 import sys
 import cv2
 import torch
+import time
 import argparse
 import threading
 import tkinter as tk
@@ -71,8 +72,12 @@ class MMChatTkinter(tk.Frame):
             self.button_funcrelated_flag = False
             self.button_systemfunc_flag = False
       def __set_params__(self):
-            self.facial_info = {}
-            self.password_info = {}
+            with open('data_cached/face_emb.json', 'r', encoding='utf-8') as f:
+                  self.facial_info = json.load(f)
+            with open('data_cached/password_emb.json', 'r', encoding='utf-8') as f:
+                  self.password_info = json.load(f)
+            # self.facial_info = {}
+            # self.password_info = {}
             self.name = None
       def __widgets__(self):
             self.root.title('MMChat-Redal')
@@ -174,6 +179,11 @@ class MMChatTkinter(tk.Frame):
             self.button_interaction_flag = not self.button_interaction_flag
             login_window = tk.Toplevel(self.root)
             login_interface = LoginInterface(login_window)
+            # 等待子界面关闭
+            self.root.wait_window(login_window)
+            with open('./data_cached/detected_user.txt', 'r') as f:
+                  self.name =  f.read()
+                  self.introduction_label.config(text=f'MMChat App Introduction\nWelcome {self.name}')
       def __button_funcrelated__(self):
             self.button_funcrelated_flag = not self.button_funcrelated_flag
             message_box = CreateMessageBox(self.root)
@@ -181,8 +191,16 @@ class MMChatTkinter(tk.Frame):
                   self.button_funcrelated_flag = not self.button_funcrelated_flag
       def __button_systemfunc__(self):
             self.button_systemfunc_flag = not self.button_systemfunc_flag
-            system_root = tk.Toplevel(self.root)
-            system_interface = Gesture_Style_APP(system_root)
+            if self.name is not None and self.button_systemfunc_flag:
+                  system_root = tk.Toplevel(self.root)
+                  system_interface = Gesture_Style_APP(system_root)
+                  self.root.wait_window(system_root)
+            else:
+                  tmp_root = tk.Toplevel(self.root)
+                  tmp_root.title('Warning')
+                  tmp_root.geometry('300x100')
+                  tmp_label = tk.Label(tmp_root, text='Please login first!'); tmp_label.pack()
+                  tmp_button = tk.Button(tmp_root, text='OK', command=tmp_root.destroy); tmp_button.pack()
       def __button_exitsystem__(self):
             self.root.quit()
 
