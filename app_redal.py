@@ -105,9 +105,15 @@ class MMChatTkinter(tk.Frame):
             self.button_systemfunc = tk.Button(self.root, text='系统功能', font=('Arial',8),
                         bg='white', fg='black', width=10, height=2, command=self.__button_systemfunc__)
             self.button_systemfunc.place(x=680, y=340)
+            self.button_user_information = tk.Button(self.root, text='用户信息', font=('Arial',8),
+                        bg='white', fg='black', width=10, height=2, command=self.__button_user_information__)
+            self.button_user_information.place(x=580, y=380)
+            self.button_clear_cached = tk.Button(self.root, text='清除缓存', font=('Arial',8),
+                        bg='white', fg='black', width=10, height=2, command=self.__button_clear_cached__)
+            self.button_clear_cached.place(x=680, y=380)
             self.button_exitsystem = tk.Button(self.root, text='退出系统', font=('Arial',8),
                         bg='white', fg='black', width=10, height=2, command=self.__button_exitsystem__) 
-            self.button_exitsystem.place(x=580, y=380)
+            self.button_exitsystem.place(x=580, y=420)
             # Set the main app's information
             self.Label_info = tk.Label(self.root, font=('Arial',8),bg='white', width=40, height=10)
             self.Label_info.place(x=540, y=100)
@@ -201,6 +207,38 @@ class MMChatTkinter(tk.Frame):
                   tmp_root.geometry('300x100')
                   tmp_label = tk.Label(tmp_root, text='Please login first!'); tmp_label.pack()
                   tmp_button = tk.Button(tmp_root, text='OK', command=tmp_root.destroy); tmp_button.pack()
+      def __button_user_information__(self):
+            """显示用户信息状态"""
+            with open('./data_cached/password_emb.json', 'r') as f:
+                  users = json.load(f)
+            if users:
+                  tmp_root = tk.Toplevel(self.root)
+                  tmp_root.title("Users' Information")
+                  tmp_root.geometry('300x100')
+                  tmp_label = tk.Label(tmp_root,); tmp_label.pack()
+                  users = users.keys()
+                  tmp_label.config(text=f'Users:{users}')
+                  tmp_button = tk.Button(tmp_root, text='OK', command=tmp_root.destroy); tmp_button.pack()
+                  self.root.wait_window(tmp_root)
+            else:
+                  tmp_root = tk.Toplevel(self.root)
+                  tmp_root.title("Users' Information")
+                  tmp_root.geometry('300x100')
+                  tmp_label = tk.Label(tmp_root, text='Please registrate first!'); tmp_label.pack()
+                  tmp_button = tk.Button(tmp_root, text='OK', command=tmp_root.destroy); tmp_button.pack()
+                  self.root.wait_window(tmp_root)
+      def __button_clear_cached__(self):
+            """清除缓存数据"""
+            with open('./data_cached/face_emb.json', 'w') as f:
+                  json.dump({}, f)
+            with open('./data_cached/password_emb.json', 'w') as f:
+                  json.dump({}, f)
+            tmp_root = tk.Toplevel(self.root)
+            tmp_root.title('Warning')
+            tmp_root.geometry('300x100')
+            tmp_label = tk.Label(tmp_root, text='Clear cached data successfully!'); tmp_label.pack()
+            tmp_button = tk.Button(tmp_root, text='OK', command=tmp_root.destroy); tmp_button.pack()
+            self.root.wait_window(tmp_root)
       def __button_exitsystem__(self):
             self.root.quit()
 
