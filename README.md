@@ -146,10 +146,70 @@ def ollama_generator(prompt):
       return generator['response']
 ```
 
-___Interface Design___: The interface design of the software is completed by multi-interface and multi-threading, mainly including the information registration of the [main interface](app_redal.py), the face of the identity verification interface, the password [verification function](app_authoriztion.py), the gesture drone control of the main control interface of the [system function](app_sysfunc.py), the LLM model dialogue, the environment perception of the VLM model, the environment object detection (YOLOv5) and other functions and their sub-interface design.
+___Interface Design___: The interface design of the software is completed by multi-interface and multi-threading, mainly including the information registration of the [main interface](app_redal.py), the face of the identity verification interface, the password [verification function](app_authoriztion.py), the gesture drone control of the main control interface of the [system function](app_sysfunc.py), the LLM model dialogue, the environment perception of the VLM model, the environment object detection (YOLOv11) and other functions and their sub-interface design.  
 
-___System Functions___:
+```python
+def __video_loop__(self):
+            while self.video_cap.isOpened():
+                  with self.camera_lock:
+                        ret, frame = self.video_cap.read()
+                  self.frame = cv2.flip( cv2.resize(cv2.cvtColor(frame, 
+                        cv2.COLOR_BGR2RGB), (512, 512)), 1 )
+                  if ret: 
+                        """Program main execution logic"""
+                        if self.face_authentication_flag: 
+                              # Plot the circle aera for embedding
+                              cv2.circle(self.frame, (256,256), 200, (0, 0, 255), 2)
+                              cv2.circle(self.frame, (256,256), 100, (0, 0, 255), 2)
+                              try:
+                                    if DeciderCenter(self.mtcnn, frame):
+                                          # Facial Recognition 
+                                          face_emb_path = os.path.join(self.args.face_emb_savepath, self.args.face_emb_jsonname)
+                                          password_emb_path = os.path.join(self.args.password_emb_savepath, self.args.password_emb_jsonname)
+                                          # Extract facial embedding and save it into json file
+                                          _, face_embedding = self.FaceRe.__extract__(frame, all_faces=False)
+                                          topmessage = GetFaceName(self.root)
+                                          # warning: the face embeding cosists list[array[]]
+                                          self.facial_info[topmessage.name] = face_embedding[0].tolist()
+                                          self.password_info[topmessage.name] = topmessage.password
+                                          if topmessage.name and topmessage.password is not None:
+                                                with open(face_emb_path, 'w+',encoding='utf-8') as jf:
+                                                      self.facial_info = dict(filter(lambda item: item[0] is not None, self.facial_info.items()))
+                                                      jf.write(json.dumps(self.facial_info, ensure_ascii=False, indent=4))
+                                                with open(password_emb_path, 'w+',encoding='utf-8') as jf:
+                                                      self.password_info = dict(filter(lambda item: item[0] is not None, self.password_info.items()))
+                                                      jf.write(json.dumps(self.password_info, ensure_ascii=False, indent=4))
+                                          # Close Facial Authentication windows 
+                                          self.face_authentication_flag = not self.face_authentication_flag
+                                          self.main_window_show = not self.main_window_show
+                                          self.video_cap.release()
+                                    self.frame = FaceVisiblity(self.mtcnn, self.frame)
+                              except: pass
+                              self.__video_show__()
+                        else: # No functions activated
+                              self.__video_show__() 
+                  else: break
+```
 
-___Gesture Control___:
+___System Functions___: The system function mainly uses checkboxes to select three main functions, namely gesture control, style transfer, model communication, and object detection. In this interface, among them, the gesture control, style transfer, and model communication functions are all implemented through multithreading and multiprocessing. The gesture control function is implemented through the OpenCV library. The style transfer function is implemented through the PyTorch library. The model communication function is implemented through the Ollama library. The object detection function is implemented through the YOLOv11 library.
 
-## Continuously updating
+```python
+def load_image(self, path, label):
+        img_iron = cv2.resize(cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2RGB), (400, 400))
+        PIL_image = Image.fromarray(img_iron)
+        photo = ImageTk.PhotoImage(PIL_image)
+        label.configure(image=photo)
+        label.image = photo  
+
+    def __select_function__(self, event):
+        """选择相关的功能界面"""
+        try: 
+            function_name = self.function_select_combobox.get()
+            if function_name == "手势识别":
+                self.__show_window__(self.gesture_recognizer_app)
+            elif function_name == "风格迁移":
+                self.__show_window__(self.style_transfer_app)
+            elif function_name == "模型交互":
+                self.__show_window__(self.model_chat_app)
+        except: pass
+```
