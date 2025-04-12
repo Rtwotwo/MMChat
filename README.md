@@ -143,4 +143,6 @@ ___Interface Design___: The interface design of the software is completed by mul
 
 ___System Functions___:
 
+___Gesture Control___:
+
 ## Continuously updating
