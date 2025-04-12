@@ -141,4 +141,6 @@ def ollama_generator(prompt):
 
 ___Interface Design___: The interface design of the software is completed by multi-interface and multi-threading, mainly including the information registration of the [main interface](app_redal.py), the face of the identity verification interface, the password [verification function](app_authoriztion.py), the gesture drone control of the main control interface of the [system function](app_sysfunc.py), the LLM model dialogue, the environment perception of the VLM model, the environment object detection (YOLOv5) and other functions and their sub-interface design.
 
+___System Functions___:
+
 ## Continuously updating
