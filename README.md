@@ -31,9 +31,10 @@ MMChat is developed using python3.10, and the relevant dependencies are as follo
 ## 2.TODO List :clipboard:
 
 - [x] Complete identity authentication model design and system deployment: face authentication, audio key authentication, voiceprint authentication  
-- [ ] Realize the generation of 3D scene images from a single image
-- [ ] Use YOLOv5 to recognize pedestrians, vehicles, etc. and track objects
+- [x] Use YOLOv11 to recognize pedestrians, vehicles, etc. and track objects
 - [x] Complete the local deployment of small parameter VLM or LLM to achieve interaction with users
+- [x] Complete the overall GUI interface design of the MMChat system based on tkinter and introduce multithreading for development.
+- [ ] Realize the generation of 3D scene images from a single image
 - [ ] Use model pruning (Opt) or model quantization to int8/int16 to compress the model
 - [ ] If you have time to learn the flight control algorithm PID or other algorithms, optimize the system interaction experience
 
@@ -49,14 +50,14 @@ python app_redal.py
 streamlit run streamlit.py
 ```
 
+|  app_redal   |   app_authorization   |   app_sysfunc   |   app_modelchat   |
+| :---: | :---: | :---: | :---: |
+| ![app_redal](assets/UI/app_redal.jpg) | ![app_authorization](assets/UI/app_authorization.jpg) | ![app_sysfunc](assets/UI/app_sysfunc.jpg)  | ![app_modelchat](assets/UI/app_modelchat.jpg)  |
+
 Next, let me introduce the framework of the whole interface design for you in detail. I will introduce in detail the MMChat main interface, user information entry interface, identity verification interface, system checkbox interface, gesture static and dynamic interface, style transfer interface, LLM model communication interface, VLM model communication interface and object detection interface.  
-![app_redal](assets/UI/app_redal.jpg)  
 ___app redal___: The above picture is the main interface, which mainly includes the overall logo of the MMChat system, a brief introduction to the system, and various functions of the main page. Finally, it also includes user registration, authentication, function information, system functions, and many other model designs. The user information entry mainly uses the dlib-based face_recognize to obtain the face embedding, personal password and personal name, and stores it in the form of {name: embedding} in the data_cached folder [face_emb.json](data_cached/face_emb.json) and [password_emb.json](data_cached/password_emb.json) files. The code is in the [app_redal.py](app_redal.py).  
-![app_authorization](assets/UI/app_authorization.jpg)  
 ___app authorization___: The above picture is authorization interface, mainly used to generate a unique user's facial embeddings and get the user's personal password and name. After Finished the authorization, the interface will be destroyed automatically. Also, If you forget to write dwon your name, the temporary interface will change the text to warn you. The code is in the [app_authorization.py](app_authorization.py).  
-![app_sysfunc](assets/UI/app_sysfunc.jpg)  
 ___app systemfunc___: App systemfunc means the system function interface, which mainly includes basic interaction functions in our system such as gesture recognition, image style transformation, LLM interaction, object detection based on YOLO and so on. When you click the button in the orange box on main interface, waiting for a short time for initializing related settings and then you can choose the function in the check box. The code is in the [app_sysfunc.py](app_sysfunc.py).  
-![app_modelchat](assets/UI/app_modelchat.jpg)  
 ___app modelchat___: The interface is designed to promote multimedia interaction and integrates video playback, image analysis, and chat interaction functions. Users can view real-time video streams through the area on the interface and conduct visual analysis at the same time, such as the display of histograms and spectrograms, to obtain additional levels of information. At the same time, the interface also provides a convenient chat window that supports users to input text messages and communicate with the system or other users, enhancing the interactive experience.The code is in the [app_modelchat.py](app_modelchat.py).  
 
 ## 4.System Function :hourglass_flowing_sand:
