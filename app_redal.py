@@ -233,6 +233,10 @@ class MMChatTkinter(tk.Frame):
                   json.dump({}, f)
             with open('./data_cached/password_emb.json', 'w') as f:
                   json.dump({}, f)
+            # 清除缓存变量
+            self.facial_info = {}
+            self.password_info = {}
+            # 设置提示清除成功messagebox
             tmp_root = tk.Toplevel(self.root)
             tmp_root.title('Warning')
             tmp_root.geometry('300x100')
