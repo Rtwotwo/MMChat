@@ -213,3 +213,7 @@ def load_image(self, path, label):
                 self.__show_window__(self.model_chat_app)
         except: pass
 ```
+
+## 5. Remaining Project :fire:
+
+Next, for the remaining code in the plan including the single-image generation world, model quantization compression, and flight control algorithm interface parts, I will continue to share the open source project code at [Yolo Redal](https://github.com/Rtwotwo). If you are interested in my project, welcome to issue me and click the star button. Thank you for your support!
