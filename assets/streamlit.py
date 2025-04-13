@@ -7,7 +7,7 @@ Homepage: https://github.com/Rtwotwo/MMchat.git
 """
 import os
 import argparse
-import streamlit as st
+import assets.streamlit as st
 import ollama
 st.set_page_config(
         page_title = 'Welcome to MMchat!',
