@@ -8,7 +8,6 @@ import os
 import cv2
 import ollama 
 import base64
-import tempfile 
 from pathlib import Path 
 from typing import Union
  
