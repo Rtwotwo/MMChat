@@ -1,10 +1,1 @@
-我是红桃K，是一个语音交互助手。生成随机数的Python代码示例如下：
-
-```python
-import random
-
-random_number = random.randint(1, 100)
-print(random_number)
-```
-
-这个代码会生成一个1到100之间的随机整数。
+请问您有什么问题吗？
